@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试的</title>
+
+</head>
+<body>
+
+<h2>系统信息</h2>
+    <div id="statics">
+
+
+    
+</div>
+
+
+
+
+</body>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+<script type="text/javascript">
+
+
+    function loadStaticInfo() {
+        console.log("=============")
+        $.ajax({
+            url:"/statics",
+            type:"json",
+            method:"POST",
+            success:function (data) {
+//                data = JSON.parse(data)
+                $("#statics").html(
+                    "协程数:"+data.AppInfo.GoroutineNum+"<br>" +
+                    "累积分配内存:"+data.AppInfo.Mem.TotalAlloc / 1024 /1024 + "mb" + "<br>" +
+                    "分配内存:" +data.AppInfo.Mem.Alloc / 1024 /1024 +"mb <br>" +
+                    "cpu使用率:"  + data.Host.CPU +"<br>" +
+                        "内存使用" +data.Host.Memory +"<br>"
+                )
+
+            }
+        })
+    }
+
+    function loadCountInfo() {
+        $.ajax({
+            url:"/countInfo",
+            method:"GET",
+            success:function (data) {
+                $("#countInfo").html(data )
+            }
+        })
+    }
+
+
+    $(document).ready(function()  {
+            setInterval(function(){
+                loadStaticInfo();
+               },2000);
+
+            $("#addrobot").click(function () {
+                $.ajax({
+                        url:"/addrobot?num="+$("#addRobotNum").val(),
+                        method:"POST",
+                        success:function (data) {
+
+
+                        }
+                    }
+                )
+            });
+            $("#searchRoom").click(function () {
+                $.ajax({
+                        url: "/roomInfo?inviteCode=" + $("#inviteCode").val(),
+                        method: "GET",
+                        success: function (data) {
+//                            $("#roomInfo").html(data);
+                            data = JSON.parse(data);
+                            data = data.data;
+                            var str = ""
+                            for (var i in data.Player ){
+                                str += "玩家uid:"+data.Player[i].Uid +",玩家的seat:" + data.Player[i].Seat +",第几round:"+data.Player[i].Round + ",isOwner:"+data.Player[i].IsOwner+"<br>"
+                                str += data.Player[i].LocalAddr+"<br>"
+                                for (var j =0; j <data.Player[i].log.length;j++ ){
+                                    if (data.Player[i].log[j] == null) {
+                                        continue;
+                                    }
+                                    str += "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "+data.Player[i].log[j].msg + ",data:" + data.Player[i].log[j].data+ "<br>"
+                                }
+                                str += "---------------------------------------------------------------<br><br><br>"
+                            }
+                            $("#roomInfo").html(str);
+                        }
+                    }
+                )
+            });
+
+    });
+
+
+
+</script>
+
+
+</html>
