@@ -36,7 +36,7 @@ func (t *Desk) drawcard() {
 	t.cards = t.cards[1:]
 	cards := t.in(t.seat, card)
 
-	v := algorithm.DrawDetect(card, cards, t.getChowCards(t.seat), t.getPongCards(t.seat), t.getKongCards(t.seat), t.luckyCard)
+	v := t.DrawDetect(card, cards, t.getChowCards(t.seat), t.getPongCards(t.seat), t.getKongCards(t.seat), t.luckyCard,t.seat)
 	v|=algorithm.DetectKong(cards,t.getPongCards(t.seat),t.luckyCard)
 
 	glog.Infof("%b",v)
@@ -48,6 +48,7 @@ func (t *Desk) drawcard() {
 	if v > 0 { //摸牌全部记录为胡(只自己操作)
 		t.opt[t.seat] = v
 	}
+
 	//其他玩家消息
 	msg1 := res_otherDraw(t.seat, value,uint32(len(t.cards)))
 	//摸牌协议消息

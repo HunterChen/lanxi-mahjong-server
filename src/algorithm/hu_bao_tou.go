@@ -5,7 +5,17 @@ package algorithm
 // (已经有十二张牌组合好，剩下一张牌为财神，并无将牌，别人打出财神牌，或者白板算放炮吗)
 // （此种情况为爆头，只能自摸，别人打出牌一律不能胡）
 // （该种情况可与其他胡牌情况倍数累加）
-func existBaoTou(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte,draw bool) int64 {
+func ExistBaoTou(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte,draw bool,hu int64) int64 {
+	if hu&HU_SINGLE > 0 || hu&HU_SINGLE_ZI > 0 ||
+	hu & HU_SEVEN_PAIR > 0  ||
+	hu & HU_KONG_FLOWER > 0 || hu & QIANG_GANG > 0 ||
+	hu & TIAN_HU > 0 || hu & DI_HU > 0 ||
+	hu & HU_HAI_LAO > 0 ||
+	hu & HU_QING_FENG > 0 || hu & HU_LUAN_FENG > 0  {
+		return 0
+	}
+
+
 	le := len(cards)
 	if !draw {
 		le = le + 1
@@ -33,7 +43,7 @@ func existBaoTou(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte,dra
 		}
 	}
 
-	value:=existHu(cards, ch, ps, ks, wildcard, 0)
+	value:=ExistHu(cards, ch, ps, ks, wildcard, 0)
 	if value >0{
 		if card == BAI {
 			return value|HU_BAO_TOU2

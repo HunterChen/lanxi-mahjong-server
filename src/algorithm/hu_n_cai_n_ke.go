@@ -1,7 +1,6 @@
 package algorithm
 
-
- // 一财一刻、两财一刻、三财一刻检测
+// 一财一刻、两财一刻、三财一刻检测
 // 财神归位检测
 // 升序的slice、一定为胡牌型
 // todo 两财一刻和财神归位同时存在的情况
@@ -62,7 +61,59 @@ func guiwei(cs []byte, ch, ps, ks []uint32, wildcard byte) (value int64) {
 
 	return
 }
+func ExistCaiShen(cs []byte, hu int64, wildcard byte) int64 {
+	count := 0
+	for _, v := range cs {
+		if wildcard == v {
+			count ++
+		}
+	}
 
+	if count == 0 {
+		return hu
+	}
+
+	use := 0
+	if hu&HU_CAI_1 > 0 {
+		use++
+	}
+	if hu&HU_GUI_WEI1 > 0 {
+		use++
+	}
+
+	if hu&HU_CAI_2 > 0 {
+		use+=2
+	}
+	if hu&HU_GUI_WEI2 > 0 {
+		use+=2
+	}
+	if hu&HU_CAI_3 > 0{
+		use+=3
+	}
+	if  hu&HU_GUI_WEI3 > 0 {
+		use+=3
+	}
+
+	if use == count{
+		return hu
+	}
+
+	if hu&HU_PENG_PENG > 0 {
+		hu = hu & (^HU_PENG_PENG)
+		hu = hu | HU_PENG_PENG_CAI
+	}
+	if hu&HU_SEVEN_PAIR > 0 {
+		hu = hu & (^HU_SEVEN_PAIR)
+		hu = hu | HU_SEVEN_PAIR_CAI
+	}
+	if hu&HU_ONE_SUIT > 0 {
+		hu = hu & (^HU_ONE_SUIT)
+		hu = hu | HU_ONE_SUIT_CAI
+	}
+
+	return hu
+
+}
 func ExistNCaiNKe(cs []byte, ch, ps, ks []uint32, wildcard byte) int64 {
 	// 计算财神的数量
 	caishenCount := 0
@@ -86,7 +137,7 @@ func ExistNCaiNKe(cs []byte, ch, ps, ks []uint32, wildcard byte) int64 {
 				}
 			}
 			Sort(list, 0, len(list)-1)
-			if existHu3n2(list, wildcard)  ||
+			if existHu3n2(list, wildcard) ||
 				existLuanFeng(getHandPongKong(list, ch, ps, ks, wildcard)) > 0 {
 				return HU_CAI_3
 			}
@@ -119,7 +170,7 @@ func ExistNCaiNKe(cs []byte, ch, ps, ks []uint32, wildcard byte) int64 {
 			}
 
 			Sort(list, 0, len(list)-1)
-			if  existHu3n2(list, wildcard) ||
+			if existHu3n2(list, wildcard) ||
 				existLuanFeng(getHandPongKong(list, ch, ps, ks, wildcard)) > 0 {
 				value := guiwei(list, ch, ps, ks, wildcard)
 				return HU_CAI_2 | value
@@ -146,7 +197,7 @@ func ExistNCaiNKe(cs []byte, ch, ps, ks []uint32, wildcard byte) int64 {
 			}
 
 			Sort(list, 0, len(list)-1)
-			if  existHu3n2(list, wildcard) ||
+			if existHu3n2(list, wildcard) ||
 				existLuanFeng(getHandPongKong(list, ch, ps, ks, wildcard)) > 0 {
 				value := guiwei(list, ch, ps, ks, wildcard)
 				return HU_CAI_1 | value

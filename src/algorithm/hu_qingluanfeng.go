@@ -18,7 +18,7 @@ func existLuanFeng(cards []byte) int64 {
 func existOneSuit(cards []byte) int64 {
 	var c byte
 	le := len(cards)
-	hasWildcard:=false
+	//hasWildcard:=false
 	for i := 0; i < le; i++ {
 		card := cards[i]
 		if card != WILDCARD {
@@ -26,12 +26,12 @@ func existOneSuit(cards []byte) int64 {
 				return 0
 			}
 			c = card
-		}else{
-			hasWildcard = true
-		}
+		}//else{
+		//	hasWildcard = true
+		//}
 	}
-	if hasWildcard{
-		return HU_ONE_SUIT_CAI
-	}
+	//if hasWildcard{
+	//	return HU_ONE_SUIT_CAI
+	//}
 	return HU_ONE_SUIT
 }

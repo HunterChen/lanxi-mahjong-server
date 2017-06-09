@@ -16,7 +16,7 @@ func (t *Desk) deal() {
 		var cards []byte = t.getHandCards(s)
 		if t.dealer == s {
 			//庄家提示处理
-			v:= algorithm.DrawDetect(0, cards, []uint32{}, []uint32{}, []uint32{}, t.luckyCard)
+			v:= t.DrawDetect(0, cards, []uint32{}, []uint32{}, []uint32{}, t.luckyCard,t.dealer)
 			v|=algorithm.DetectKong(cards,[]uint32{}, t.luckyCard)
 			if v > 0 {
 				t.opt[s] = v //设置操作状态值

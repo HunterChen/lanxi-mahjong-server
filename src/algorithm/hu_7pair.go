@@ -20,7 +20,7 @@ func exist7pair(cs []byte) int64 {
 		}
 	}
 
-	hasWildcard:= false
+	//hasWildcard:= false
 
 	// 单个的杂牌跟万能匹对
 	for i := uint8(0); i < le-1; i++ {
@@ -28,7 +28,7 @@ func exist7pair(cs []byte) int64 {
 			if ((flag>>j)&0x1) == 1 && cs[j] != WILDCARD && cs[i] == WILDCARD {
 				flag = flag & (^(1 << i))
 				flag = flag & (^(1 << j))
-				hasWildcard = true
+				//hasWildcard = true
 				break
 			}
 		}
@@ -40,7 +40,7 @@ func exist7pair(cs []byte) int64 {
 		if ((flag >> i) & 0x1) == 1 {
 			if cs[i] == WILDCARD {
 				wilecardCount ++
-				hasWildcard = true
+				//hasWildcard = true
 			} else {
 				dirtyCount ++
 			}
@@ -49,9 +49,9 @@ func exist7pair(cs []byte) int64 {
 	}
 
 	if wilecardCount == dirtyCount || dirtyCount == 0 {
-		if hasWildcard {
-			return HU_SEVEN_PAIR_CAI
-		}
+		//if hasWildcard && wilecardCount != dirtyCount{
+		//	return HU_SEVEN_PAIR_CAI
+		//}
 		return HU_SEVEN_PAIR
 	}
 	return 0

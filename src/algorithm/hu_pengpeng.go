@@ -3,19 +3,19 @@ package algorithm
 // 碰碰胡
 // 有序slices cs
 func ExistPengPeng(cs []byte,wildcard byte) int64 {
-	hasWildcard:= false
-	for _,v:=range cs{
-		if v == WILDCARD{
-			hasWildcard = true
-			break
-		}
-	}
+	//hasWildcard:= false
+	//for _,v:=range cs{
+	//	if v == WILDCARD{
+	//		hasWildcard = true
+	//		break
+	//	}
+	//}
 
 	value := hu3n2PengPeng(cs)
 	if value > 0 {
-		if hasWildcard{
-			return  HU_PENG_PENG_CAI
-		}
+		//if hasWildcard{
+			//return  HU_PENG_PENG_CAI
+		//}
 		return  HU_PENG_PENG
 	}
 	// 财神是白板的情况作限制
@@ -28,9 +28,9 @@ func ExistPengPeng(cs []byte,wildcard byte) int64 {
 				Sort(cards, 0, len(cards)-1)
 				value := hu3n2PengPeng(cards)
 				if value > 0 {
-					if hasWildcard{
-						return  HU_PENG_PENG_CAI
-					}
+					//if hasWildcard{
+					//	return  HU_PENG_PENG_CAI
+					//}
 					return  HU_PENG_PENG
 				}
 			}

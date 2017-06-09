@@ -63,11 +63,11 @@ func create(ctos *protocol.CCreatePrivateRoom, c interfacer.IConn) {
 	}
 
 	// 预判断房卡数量，是否足够创建房间
-	//if player.GetRoomCard() < cost {
-	//	stoc.Error = proto.Uint32(uint32(protocol.Error_NotEnough_ROOM_CARD))
-	//	c.Send(stoc)
-	//	return
-	//}
+	if player.GetRoomCard() < cost {
+		stoc.Error = proto.Uint32(uint32(protocol.Error_NotEnough_ROOM_CARD))
+		c.Send(stoc)
+		return
+	}
 
 	r := desk.NewDeskData(uint32(roomid), round, expire, config.Opts().Ante, cost, creator, code, ctos.GetMaizi())
 	roomdata := &protocol.RoomData{

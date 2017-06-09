@@ -12,62 +12,9 @@ func DetectKong(cs []byte, ps []uint32, wildcard byte) (status int64) {
 	return
 }
 
-// 摸牌检测,胡牌／暗杠／补杠
-func DrawDetect(card byte, cs []byte, ch, ps, ks []uint32, wildcard byte) int64 {
-	//自摸胡检测
-	status := existHu(cs, ch, ps, ks, wildcard, 0)
-	if status > 0 {
-		// 13不靠没有爆头
-		if status&HU_SINGLE == 0 && status&HU_SINGLE_ZI == 0 {
-			baotou := existBaoTou(cs, ch, ps, ks, wildcard, card, true)
-			if baotou > 0 {
-				status = baotou
-			}
-		}
-
-		threeW := threeWildcard(cs, wildcard)
-		if (threeW > 0) && (status&(^HU)) == 0 {
-			return 0
-		}
-		if threeW > 0 {
-			status = HU_3_CAI_SHEN | status
-		}
-
-		status |= ZIMO
-	}
-	return status
-}
-
-// 打牌检测,胡牌, 接炮胡检测
-func DiscardHu(card byte, cs []byte, ch, ps, ks []uint32, wildcard byte) int64 {
-	// 财神不能接炮胡
-	if card == wildcard {
-		return 0
-	}
-	status := existHu(cs, ch, ps, ks, wildcard, card)
-	if status > 0 {
-		// 爆头不能炮胡,13不靠没有爆头
-		if status&HU_SINGLE == 0 && status&HU_SINGLE_ZI == 0 {
-			if existBaoTou(cs, ch, ps, ks, wildcard, card, false) > 0 {
-				return 0
-			}
-		}
-
-		threeW := threeWildcard(cs, wildcard)
-		if ( threeW > 0) && ( status&(^HU)) == 0 {
-			return 0
-		}
-		if threeW > 0 {
-			status = HU_3_CAI_SHEN | status
-		}
-
-		status |= PAOHU
-	}
-	return status
-}
 
 // 判断是否胡牌,0表示不胡牌,非0用32位表示不同的胡牌牌型
-func existHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 {
+func ExistHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 {
 	le := len(cards)
 	if card > 0 {
 		le = le + 1
@@ -119,9 +66,9 @@ func existHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 
 		if color > 0 {
 			value = color | value
 		}
-		return HU | value
-	}
-	if existHu3n2(cards, wildcard) {
+		//return HU | value
+		value |= HU
+	}else if existHu3n2(cards, wildcard) {
 		value = HU
 	}
 	//是否3n+2牌型
@@ -176,7 +123,7 @@ func existHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 
 }
 
 //三个财神加倍
-func threeWildcard(handcard []byte, wildcard byte) int64 {
+func ThreeWildcard(handcard []byte, wildcard byte) int64 {
 	count := 0
 	for _, v := range handcard {
 		if wildcard == v {

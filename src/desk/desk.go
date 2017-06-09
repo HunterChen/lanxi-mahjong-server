@@ -230,7 +230,7 @@ func (t *Desk) qiangKong(card byte, mask int64) bool {
 		//if !ok {
 		//var cards []byte = t.getHandCards(s)
 		//胡,杠碰,吃检测
-		v_h := algorithm.DiscardHu(card, t.getHandCards(s), t.getChowCards(s), t.getPongCards(s), t.getKongCards(s), t.luckyCard) //胡
+		v_h := t.DiscardHu(card, t.getHandCards(s), t.getChowCards(s), t.getPongCards(s), t.getKongCards(s), t.luckyCard) //胡
 		if v_h > 0 {
 			t.unskipL(s) //抢杠玩家一定过圈
 			t.opt[s] = v_h | algorithm.QIANG_GANG
@@ -462,4 +462,80 @@ func (t *Desk) buKong(seat uint32, card byte) bool {
 	t.kongCards[seat] = cs
 	t.pongCards[seat] = pongs
 	return true
+}
+
+// 摸牌检测,胡牌／暗杠／补杠
+func(t *Desk) DrawDetect(card byte, cs []byte, ch, ps, ks []uint32, wildcard byte,seat uint32) int64 {
+	//自摸胡检测
+	status := algorithm.ExistHu(cs, ch, ps, ks, wildcard, 0)
+	if status > 0 {
+
+		if t.tianHe(seat) > 0{ //天胡
+			status = status | algorithm.TIAN_HU
+		}else if t.diHe() >0{//地胡
+			status = status | algorithm.DI_HU
+		}else if t.haidilaoHe()  >0{  // 海底捞
+			status = status | algorithm.HU_HAI_LAO
+		}
+		// 13不靠没有爆头
+		//if status&HU_SINGLE == 0 && status&HU_SINGLE_ZI == 0 {
+		baotou := algorithm.ExistBaoTou(cs, ch, ps, ks, wildcard, card, true,status)
+		if baotou > 0 {
+			status = baotou
+		}
+		//}
+
+		threeW := algorithm.ThreeWildcard(cs, wildcard)
+		if (threeW > 0) && (status&(^algorithm.HU)) == 0 {
+			return 0
+		}
+		if threeW > 0 {
+			status = algorithm.HU_3_CAI_SHEN | status
+		}
+		status = algorithm.ExistCaiShen(cs,status,wildcard)
+		status |= algorithm.ZIMO
+	}
+	return status
+}
+
+// 打牌检测,胡牌, 接炮胡检测
+func (t *Desk) DiscardHu(card byte, cs []byte, ch, ps, ks []uint32, wildcard byte) int64 {
+	// 财神不能接炮胡
+	if card == wildcard {
+		return 0
+	}
+	status := algorithm.ExistHu(cs, ch, ps, ks, wildcard, card)
+	if status > 0 {
+
+		//if t.tianHe(seat) > 0{ //天胡
+		//	status = status | algorithm.TIAN_HU
+		//}else
+		if t.diHe() >0{//地胡
+			status = status | algorithm.DI_HU
+		}
+		//else if t.haidilaoHe()  >0{  // 海底捞
+		//	status = status | algorithm.HU_HAI_LAO
+		//}
+
+
+		// 爆头不能炮胡,13不靠没有爆头
+		//if status&HU_SINGLE == 0 && status&HU_SINGLE_ZI == 0 {
+		if algorithm.ExistBaoTou(cs, ch, ps, ks, wildcard, card, false,status) > 0 {
+			return 0
+		}
+		//}
+
+		status = algorithm.ExistCaiShen(cs,status,wildcard)
+
+		threeW := algorithm.ThreeWildcard(cs, wildcard)
+		if ( threeW > 0) && ( status&(^algorithm.HU)) == 0 {
+			return 0
+		}
+		if threeW > 0 {
+			status = algorithm.HU_3_CAI_SHEN | status
+		}
+
+		status |= algorithm.PAOHU
+	}
+	return status
 }
