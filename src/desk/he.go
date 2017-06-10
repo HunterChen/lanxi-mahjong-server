@@ -29,13 +29,7 @@ func (t *Desk) qiangKongHe(seat uint32, card byte) {
 // 海底捞,摸到属于每个玩家的最后一张牌
 func (t *Desk) haidilaoHe( ) int64 {
 	if len(t.cards) < 4 {
-		//for k, v := range t.opt {
-		//	if v&algorithm.ZIMO > 0 {
-		//		t.opt[k] = v | algorithm.HU_HAI_LAO
 		return algorithm.HU_HAI_LAO
-				//break
-			//}
-		//}
 	}
 	return  0
 }
@@ -54,12 +48,7 @@ func (t *Desk) tianHe(seat uint32) int64 {
 	if l_o == 0 && l_p == 0 &&
 		l_k == 0 && l_c == 0 {
 		if seat == t.dealer && t.discard == 0 {
-			//for k, v := range t.opt {
-			//	if v&algorithm.HU > 0 {
-			//		t.opt[k] = v | algorithm.TIAN_HU
 			return algorithm.TIAN_HU
-			//}
-			//}
 		}
 	}
 	return 0
@@ -85,11 +74,6 @@ func (t *Desk) diHe( ) int64 {
 	var l_k int = len(t.kongCards)
 	var l_c int = len(t.chowCards)
 	if l_p == 0 && l_k == 0 && l_c == 0 {
-		//for k, v := range t.opt {
-		//	if v&algorithm.HU > 0 {
-				//t.opt[k] = v | algorithm.DI_HU
-			//}
-		//}
 		return algorithm.DI_HU
 	}
 	return 0
@@ -133,7 +117,6 @@ func (t *Desk) he(seat uint32, card byte) {
 	for i, v := range total {
 		p := t.getPlayer(i)
 		uid := p.GetUserid()
-		//v *= int32(t.data.Ante) //番*底分
 		t.data.Score[uid] += v //总分
 		score[i] = v           //当局分
 	}
@@ -158,16 +141,6 @@ func (t *Desk) he(seat uint32, card byte) {
 //连庄计算
 func (t *Desk) lianDealer(huangZhuang bool, seat uint32) {
 	if !huangZhuang { //胡牌
-		//count := 0
-		//for _, v := range t.opt {
-		//	if v&algorithm.HU > 0 {
-		//		count++
-		//	}
-		//}
-
-		//if count > 1 {
-		//t.dealer = t.seat //一炮多响,放炮者当庄
-		//} else {
 		// 稳庄
 		if t.dealer == seat {
 			t.lianCount ++
@@ -175,13 +148,8 @@ func (t *Desk) lianDealer(huangZhuang bool, seat uint32) {
 			t.dealer = seat //胡牌玩家接庄
 			t.lianCount = 0
 		}
-		//}
-	} else { //黄庄,下个位接庄
-		dealer := t.dealer + 1
-		if dealer > 4 {
-			dealer = 1
-		}
-		t.lianCount = 0
+	} else { //黄庄稳庄
+
 	}
 }
 

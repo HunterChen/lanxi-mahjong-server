@@ -10,7 +10,6 @@ func ExistBaoTou(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte,dra
 	hu & HU_SEVEN_PAIR > 0  ||
 	hu & HU_KONG_FLOWER > 0 || hu & QIANG_GANG > 0 ||
 	hu & TIAN_HU > 0 || hu & DI_HU > 0 ||
-	hu & HU_HAI_LAO > 0 ||
 	hu & HU_QING_FENG > 0 || hu & HU_LUAN_FENG > 0  {
 		return 0
 	}

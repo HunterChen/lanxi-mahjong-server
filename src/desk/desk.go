@@ -478,12 +478,10 @@ func(t *Desk) DrawDetect(card byte, cs []byte, ch, ps, ks []uint32, wildcard byt
 			status = status | algorithm.HU_HAI_LAO
 		}
 		// 13不靠没有爆头
-		//if status&HU_SINGLE == 0 && status&HU_SINGLE_ZI == 0 {
 		baotou := algorithm.ExistBaoTou(cs, ch, ps, ks, wildcard, card, true,status)
 		if baotou > 0 {
 			status = baotou
 		}
-		//}
 
 		threeW := algorithm.ThreeWildcard(cs, wildcard)
 		if (threeW > 0) && (status&(^algorithm.HU)) == 0 {
@@ -506,24 +504,14 @@ func (t *Desk) DiscardHu(card byte, cs []byte, ch, ps, ks []uint32, wildcard byt
 	}
 	status := algorithm.ExistHu(cs, ch, ps, ks, wildcard, card)
 	if status > 0 {
-
-		//if t.tianHe(seat) > 0{ //天胡
-		//	status = status | algorithm.TIAN_HU
-		//}else
 		if t.diHe() >0{//地胡
 			status = status | algorithm.DI_HU
 		}
-		//else if t.haidilaoHe()  >0{  // 海底捞
-		//	status = status | algorithm.HU_HAI_LAO
-		//}
-
 
 		// 爆头不能炮胡,13不靠没有爆头
-		//if status&HU_SINGLE == 0 && status&HU_SINGLE_ZI == 0 {
 		if algorithm.ExistBaoTou(cs, ch, ps, ks, wildcard, card, false,status) > 0 {
 			return 0
 		}
-		//}
 
 		status = algorithm.ExistCaiShen(cs,status,wildcard)
 
