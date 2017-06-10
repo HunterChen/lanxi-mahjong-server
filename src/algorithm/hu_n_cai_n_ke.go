@@ -61,6 +61,7 @@ func guiwei(cs []byte, ch, ps, ks []uint32, wildcard byte) (value int64) {
 
 	return
 }
+//  清一色／碰碰和／小七对  牌型有无财神对 检测
 func ExistCaiShen(cs []byte, hu int64, wildcard byte) int64 {
 	count := 0
 	for _, v := range cs {
