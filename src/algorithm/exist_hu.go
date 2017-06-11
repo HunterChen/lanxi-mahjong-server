@@ -49,8 +49,6 @@ func ExistHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 
 			if seven > 0 {
 				value = seven | value
 			}
-
-			//return value
 		}
 		// 清一色检测
 		qing := existOneSuit(handPongKong)
@@ -66,7 +64,6 @@ func ExistHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 
 		if color > 0 {
 			value = color | value
 		}
-		//return HU | value
 		value |= HU
 	}else if existHu3n2(cards, wildcard) {
 		value = HU
@@ -87,7 +84,6 @@ func ExistHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 
 		color := existOneSuit(handPongKong)
 		if color > 0 {
 			value = color | value
-			//return value
 		}
 		// 碰碰胡，有吃牌就不算碰碰胡
 
@@ -96,8 +92,6 @@ func ExistHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 
 			if seven > 0 {
 				value = seven | value
 			}
-
-			return value
 		}
 		return value
 	}
