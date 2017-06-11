@@ -40,7 +40,6 @@ func (t *Desk) gameOver(huangZhuang  bool) map[uint32]int32 {
 	for k := uint32(1); k <= 4; k++ {
 		if t.opt[k]&algorithm.HU > 0 {
 			fan := huType(t.opt[k], t.data.Ante)
-
 			fanType(t.lianCount, t.seat, k, fan, t.maizi, total)
 			break
 		}
@@ -48,7 +47,6 @@ func (t *Desk) gameOver(huangZhuang  bool) map[uint32]int32 {
 	return total
 }
 
-//倍数(放冲,庄家 - 双倍) TODO:优化
 //lianCount连庄数,paoseat=放炮位置,huseat=胡牌位置
 func fanType(lianCount, paoseat, huseat, score uint32, maizi map[uint32]uint32, huFan map[uint32]int32) map[uint32]int32 {
 	if paoseat == huseat { //自摸,收三家
@@ -65,7 +63,7 @@ func fanType(lianCount, paoseat, huseat, score uint32, maizi map[uint32]uint32, 
 					 //huFan = over(huFan, huseat, i, int32(score)*int32(lianCount+1)+int32(maizi[huseat]+maizi[i])*int32(score))
 					huFan = over(huFan, huseat, i, int32(score))
 				} else {
-					 //huFan = over(huFan, huseat, i, int32(float32(score)*0.5)*int32(lianCount+1)+int32(maizi[huseat]+maizi[i])*int32(score))
+					 //huFan = over(huFan, huseat, i, int32(float32(score)*0.5)*int32(lianCount+1)+int32(maizi[huseat]+maizi[i])*int32(float32(score)*0.5))
 					huFan = over(huFan, huseat, i, int32(float32(score)*0.5))
 				}
 			}

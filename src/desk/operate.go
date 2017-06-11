@@ -15,7 +15,6 @@ func (t *Desk) Operate(card uint32, value int64, seat uint32) int32 {
 	}
 
 
-	//glog.Infof("%b %b %x %d",t.opt[seat],value,card,seat)
 	if t.opt[seat] == 0 {
 		return int32(protocol.Error_NoOperate)
 	}
@@ -24,7 +23,6 @@ func (t *Desk) Operate(card uint32, value int64, seat uint32) int32 {
 		return int32(protocol.Error_NoOperate)
 	}
 
-	//glog.Infof("%b %d",seat,value)
 	if t.opt[seat]&algorithm.HU > 0 && (value&algorithm.HU > 0 || value == 0) {
 		if value&algorithm.HU > 0 {
 			// 因为没有一炮多响，所以去除其他玩家的操作状态
@@ -71,9 +69,6 @@ func (t *Desk) Operate(card uint32, value int64, seat uint32) int32 {
 			}
 		} else {
 			t.cancelOperate(seat, t.seat, value, card)
-			//if seat != t.seat { //如果暗杠时取消不应该摸牌,应该打牌
-			//	t.turn() // 取消时进入下一个操作
-			//}
 		}
 	} else if t.opt[seat]&algorithm.MING_KONG > 0 && (value&algorithm.MING_KONG > 0 || value == 0) {
 		t.opt[seat] = 0
@@ -92,10 +87,8 @@ func (t *Desk) Operate(card uint32, value int64, seat uint32) int32 {
 				return int32(protocol.Error_NoOperate)
 			}
 
-			//glog.Infof("Error_NoOperate %b %b %x %d",t.opt[seat],value,card,seat)
 		} else {
 			t.cancelOperate(seat, t.seat, value, card)
-			//t.turn() // 取消时进入下一个操作
 		}
 	} else if t.opt[seat]&algorithm.PENG > 0 && (value&algorithm.PENG > 0 || value == 0) {
 		t.opt[seat] = 0
@@ -118,7 +111,6 @@ func (t *Desk) Operate(card uint32, value int64, seat uint32) int32 {
 			t.turn() //取消时进入下一个操作
 		}
 	} else {
-		//glog.Infof("Error_NoOperate %b %b %x %d",t.opt[seat],value,card,seat)
 		return int32(protocol.Error_NoOperate)
 	}
 	return 0

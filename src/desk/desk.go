@@ -152,7 +152,6 @@ func (t *Desk) kong_(card1 uint32, value int64, seat uint32) bool {
 
 		boolean := t.buKong(seat, card)
 
-		//glog.Infof("Error_NoOperate %b %b %x %d %v",t.opt[seat],value,card1,seat,boolean)
 		if !boolean {
 			return false
 		}

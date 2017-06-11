@@ -8,8 +8,6 @@ import (
 
 //模牌,kong==false普通摸牌,kong==true扛后摸牌
 func (t *Desk) drawcard() {
-	//t.Lock() //房间加锁
-	//defer t.Unlock()
 	<-time.After(time.Millisecond * 100)
 	if len(t.cards) == 0 {
 		t.he(0,0) //结束牌局
