@@ -15,13 +15,10 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"players"
 	_ "net/http/pprof"
 	"request"
 	"runtime/debug"
 	"syscall"
-	"time"
-
 	"github.com/golang/glog"
 	"config"
 	"cheat"
@@ -32,20 +29,19 @@ import (
 )
 
 var (
-	VERSION = "0.0.0"
-	BUILD_TIME      = ""
+	VERSION    = "0.0.0"
+	BUILD_TIME = ""
 )
 
-
 func main() {
-	fmt.Println("version: ",VERSION,"timestamp:",BUILD_TIME)
+	fmt.Println("version: ", VERSION, "timestamp:", BUILD_TIME)
 	var path string
 	flag.StringVar(&path, "conf", "./config.toml", "config path")
 	flag.Parse()
 	config.ParseToml(path)
 
-	cheat.VERSION= VERSION
-	cheat.BUILD_TIME =BUILD_TIME
+	cheat.VERSION = VERSION
+	cheat.BUILD_TIME = BUILD_TIME
 	glog.Infoln("Config: ", config.Opts())
 	defer glog.Flush()
 	glog.Infoln("逻辑服务器端口:", config.Opts().Server_port)
@@ -107,10 +103,10 @@ func gamesignalProc(ln net.Listener, lnCh chan error) {
 			socket.Close()
 			//关闭服务
 			desk.Close()
-			players.Close()
+			//players.Close()
 			//延迟退出，等待连接关闭，数据回存
 			glog.Infof("get sig -> %v\n", msg)
-			<-time.After(10 * time.Second)
+
 			return
 		case syscall.SIGHUP:
 

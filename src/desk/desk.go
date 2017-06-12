@@ -489,7 +489,7 @@ func(t *Desk) DrawDetect(card byte, cs []byte, ch, ps, ks []uint32, wildcard byt
 		if threeW > 0 {
 			status = algorithm.HU_3_CAI_SHEN | status
 		}
-		status = algorithm.ExistCaiShen(cs,status,wildcard)
+		status = algorithm.ExistCaiShen(cs,status,wildcard,card,true)
 		status |= algorithm.ZIMO
 	}
 	return status
@@ -512,7 +512,7 @@ func (t *Desk) DiscardHu(card byte, cs []byte, ch, ps, ks []uint32, wildcard byt
 			return 0
 		}
 
-		status = algorithm.ExistCaiShen(cs,status,wildcard)
+		status = algorithm.ExistCaiShen(cs,status,wildcard,card, false)
 
 		threeW := algorithm.ThreeWildcard(cs, wildcard)
 		if ( threeW > 0) && ( status&(^algorithm.HU)) == 0 {

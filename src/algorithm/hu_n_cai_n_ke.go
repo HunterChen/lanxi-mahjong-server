@@ -61,15 +61,51 @@ func guiwei(cs []byte, ch, ps, ks []uint32, wildcard byte) (value int64) {
 
 	return
 }
+
 //  清一色／碰碰和／小七对  牌型有无财神对 检测
-func ExistCaiShen(cs []byte, hu int64, wildcard byte) int64 {
+func ExistCaiShen(cards []byte, hu int64, wildcard byte, card byte, draw bool) int64 {
+	le := len(cards)
+	if !draw {
+		le = le + 1
+		cs := make([]byte, le)
+		copy(cs, cards)
+		cs[le-1] = card
+		cards = cs
+	} else {
+		cs := make([]byte, le)
+		copy(cs, cards)
+		cards = cs
+	}
+
 	count := 0
-	for _, v := range cs {
-		if wildcard == v {
-			count ++
+
+	//glog.Infoln(hu&HU_BAO_TOU1 > 0 ,  hu&HU_BAO_TOU2 > 0, hu&HU_BAO_TOU3 > 0)
+	if hu&HU_BAO_TOU1 > 0 || hu&HU_BAO_TOU2 > 0 || hu&HU_BAO_TOU3 > 0 {
+		wildcardFlag := false
+		cardFlag := false
+
+		for _, v := range cards {
+			if !cardFlag || v == card {
+				cardFlag = true
+				continue
+			}
+			if wildcard == v {
+				if !wildcardFlag {
+					wildcardFlag = true
+					continue
+				}
+				count ++
+			}
+		}
+	} else {
+		for _, v := range cards {
+			if wildcard == v {
+				count ++
+			}
 		}
 	}
 
+	//glog.Infof("%+x  %d",cards,count)
 	if count == 0 {
 		return hu
 	}
@@ -83,19 +119,19 @@ func ExistCaiShen(cs []byte, hu int64, wildcard byte) int64 {
 	}
 
 	if hu&HU_CAI_2 > 0 {
-		use+=2
+		use += 2
 	}
 	if hu&HU_GUI_WEI2 > 0 {
-		use+=2
+		use += 2
 	}
-	if hu&HU_CAI_3 > 0{
-		use+=3
+	if hu&HU_CAI_3 > 0 {
+		use += 3
 	}
-	if  hu&HU_GUI_WEI3 > 0 {
-		use+=3
+	if hu&HU_GUI_WEI3 > 0 {
+		use += 3
 	}
 
-	if use == count{
+	if use == count {
 		return hu
 	}
 

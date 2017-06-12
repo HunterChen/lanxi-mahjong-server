@@ -87,7 +87,7 @@ stop() {
 	    #kill -9 $PID
 	    kill -2 $PID
 	    echo "$PID killed!"
-	    sleep 15s
+	   
 	    return 1
     else
 	    echo "stopped"

@@ -80,13 +80,11 @@ func ExistHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 
 			return value
 		}
 		// 清一色检测
-
 		color := existOneSuit(handPongKong)
 		if color > 0 {
 			value = color | value
 		}
 		// 碰碰胡，有吃牌就不算碰碰胡
-
 		if len(ch) == 0 {
 			seven := ExistPengPeng(cards, wildcard)
 			if seven > 0 {

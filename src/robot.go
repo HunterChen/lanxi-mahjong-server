@@ -198,7 +198,7 @@ func robotsignalProc(ln net.Listener, lnCh chan error) {
 			robots.CloseRobots()
 			//延迟退出，等待连接关闭，数据回存
 			glog.Infof("get sig -> %v\n", msg)
-			utils.Sleep(10)
+
 			return
 		case syscall.SIGHUP:
 			glog.Infof("get sighup -> %v\n", msg)
