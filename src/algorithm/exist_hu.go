@@ -1,5 +1,7 @@
 package algorithm
 
+import "github.com/golang/glog"
+
 func DetectKong(cs []byte, ps []uint32, wildcard byte) (status int64) {
 	if len(existAnKong(cs, wildcard)) > 0 {
 		status |= AN_KONG
@@ -51,7 +53,7 @@ func ExistHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 
 			}
 		}
 		// 清一色检测
-		qing := existOneSuit(handPongKong)
+		qing := existOneSuit(handPongKong,wildcard)
 		value = value | qing
 		return value
 	}
@@ -60,7 +62,7 @@ func ExistHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 
 	if value > 0 {
 		handPongKong := getHandPongKong(cards, ch, ps, ks, wildcard)
 		// 清一色检测
-		color := existOneSuit(handPongKong)
+		color := existOneSuit(handPongKong,wildcard)
 		if color > 0 {
 			value = color | value
 		}
@@ -80,7 +82,8 @@ func ExistHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 
 			return value
 		}
 		// 清一色检测
-		color := existOneSuit(handPongKong)
+		glog.Infof("%+x",handPongKong)
+		color := existOneSuit(handPongKong,wildcard)
 		if color > 0 {
 			value = color | value
 		}

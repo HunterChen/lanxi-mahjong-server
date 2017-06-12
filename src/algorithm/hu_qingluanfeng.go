@@ -15,23 +15,21 @@ func existLuanFeng(cards []byte) int64 {
 }
 
 // 清一色检测
-func existOneSuit(cards []byte) int64 {
+func existOneSuit(cards []byte,wildcard byte) int64 {
 	var c byte
 	le := len(cards)
-	//hasWildcard:=false
 	for i := 0; i < le; i++ {
 		card := cards[i]
-		if card != WILDCARD {
+		//if card == BAI{
+		//	card = wildcard
+		//}
+		if card != WILDCARD && card != 0xFE{
 			if c > 0 && c>>4 != card>>4 {
 				return 0
 			}
 			c = card
-		}//else{
-		//	hasWildcard = true
-		//}
+		}
 	}
-	//if hasWildcard{
-	//	return HU_ONE_SUIT_CAI
-	//}
+
 	return HU_ONE_SUIT
 }
