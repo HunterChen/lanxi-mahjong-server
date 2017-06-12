@@ -16,6 +16,7 @@ import (
 	"lib/utils"
 	"resource"
 	"cheat/statics"
+	"runtime"
 )
 
 //用于测试指定房间牌型
@@ -26,6 +27,12 @@ type RoomCheat struct {
 	Seat     [][]byte `json:"seat"`     // 每个座位的手牌 第一个是座家的，其它三家随机
 	Card     []byte   `json:"card"`     // 剩余的牌
 }
+
+
+var (
+	VERSION = "0.0.1"
+	BUILD_TIME      = ""
+)
 
 func Run(port string) {
 	e := echo.New()
@@ -51,6 +58,8 @@ func Run(port string) {
 	e.POST("/printroominfo", printroominfo)
 
 	e.GET("/reloadconfig", reloadconfig)
+
+	e.GET("/release", release)
 	// debug
 	//e.GET("/debug/pprof/", pprof.Index)
 	//e.GET("/debug/pprof/cmdline", pprof.Cmdline)
@@ -73,6 +82,9 @@ type RoomInfoReq struct {
 	RoomId int      `json:"roomid"` // 房间号(邀请码)
 }
 
+func release(c echo.Context) error {
+	return c.JSON(http.StatusOK, H{"go version": runtime.Version(),"build time":BUILD_TIME,"version":VERSION})
+}
 func staticsHdl(c echo.Context) error {
 	//bs,err := json.Marshal(statics.GetSysmtemInfo())
 	return c.JSON(http.StatusOK, statics.GetSysmtemInfo())

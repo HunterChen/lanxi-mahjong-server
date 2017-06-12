@@ -28,20 +28,24 @@ import (
 	"csv"
 	_ "roomrequest"
 	"lib/socket"
+	"fmt"
 )
 
 var (
-	version = "0.0.1"
-	ip      = ""
+	VERSION = "0.0.1"
+	BUILD_TIME      = ""
 )
 
 
 func main() {
+	fmt.Println("version: ",VERSION,"timestamp:",BUILD_TIME)
 	var path string
 	flag.StringVar(&path, "conf", "./config.toml", "config path")
 	flag.Parse()
 	config.ParseToml(path)
 
+	cheat.VERSION= VERSION
+	cheat.BUILD_TIME =BUILD_TIME
 	glog.Infoln("Config: ", config.Opts())
 	defer glog.Flush()
 	glog.Infoln("逻辑服务器端口:", config.Opts().Server_port)
@@ -51,7 +55,7 @@ func main() {
 	csv.InitShop()
 
 	ln, lnCh := socket.Server(config.Opts().Server_port)
-	glog.Infoln("version:", version)
+
 	glog.Infoln("Server listening on", config.Opts().Server_port)
 	glog.Infoln("Server started at", ln.Addr())
 	go cheat.Run(config.Opts().AdminPort)

@@ -27,27 +27,29 @@ func (t *Desk) qiangKongHe(seat uint32, card byte) {
 }
 
 // 海底捞,摸到属于每个玩家的最后一张牌
-func (t *Desk) haidilaoHe( ) int64 {
+func (t *Desk) haidilaoHe() int64 {
 	if len(t.cards) < 4 {
 		return algorithm.HU_HAI_LAO
 	}
-	return  0
+	return 0
 }
 
 //天胡
 func (t *Desk) tianHe(seat uint32) int64 {
-	var l_s uint32 = uint32(len(t.cards))
-	var l_h uint32 = algorithm.TOTAL - (algorithm.HAND*4 + 1)
-	if l_s != l_h {
+	if uint32(len(t.cards)) != algorithm.TOTAL-(algorithm.HAND*4+1) {
 		return 0
 	}
+
+	if seat != t.dealer {
+		return 0
+	}
+
 	var l_o int = len(t.outCards)
 	var l_p int = len(t.pongCards)
 	var l_k int = len(t.kongCards)
 	var l_c int = len(t.chowCards)
-	if l_o == 0 && l_p == 0 &&
-		l_k == 0 && l_c == 0 {
-		if seat == t.dealer && t.discard == 0 {
+	if l_o == 0 && l_p == 0 && l_k == 0 && l_c == 0 {
+		if t.discard == 0 {
 			return algorithm.TIAN_HU
 		}
 	}
@@ -55,26 +57,57 @@ func (t *Desk) tianHe(seat uint32) int64 {
 }
 
 //地胡
-func (t *Desk) diHe( ) int64 {
-	var l_s uint32 = uint32(len(t.cards))
-	var l_h uint32 = algorithm.TOTAL - (algorithm.HAND*4 + 4)
-	if l_s < l_h {
+func (t *Desk) diHe(seat uint32) int64 {
+	if uint32(len(t.cards)) < algorithm.TOTAL-(algorithm.HAND*4+4) {
+		return 0
+	}
+	if t.dealer == seat {
 		return 0
 	}
 
-	count := 0
-	for _, v := range t.outCards {
-		count += len(v)
-	}
-	if count > 4 {
+	if len(t.outCards[seat]) > 0 {
 		return 0
 	}
 
-	var l_p int = len(t.pongCards)
-	var l_k int = len(t.kongCards)
-	var l_c int = len(t.chowCards)
-	if l_p == 0 && l_k == 0 && l_c == 0 {
-		return algorithm.DI_HU
+	if len(t.pongCards[seat]) > 0 {
+		return 0
+	}
+	if len(t.chowCards[seat]) > 0 {
+		return 0
+	}
+	if len(t.kongCards[seat]) > 0 {
+		return 0
+	}
+
+	for _, v := range t.pongCards {
+		for _, c := range v {
+			s, _ := algorithm.DecodePeng(c)
+			if s == seat {
+				return 0
+			}
+		}
+	}
+
+	for _, v := range t.kongCards {
+		for _, c := range v {
+			s, _, _ := algorithm.DecodeKong(c)
+			if s == seat {
+				return 0
+			}
+		}
+	}
+
+	tseat := seat + 1
+	if tseat > 4 {
+		tseat = 1
+	}
+	for s, v := range t.chowCards {
+		if tseat == s {
+			if len(v) > 0 {
+				return 0
+			}
+			break
+		}
 	}
 	return 0
 }

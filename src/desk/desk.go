@@ -229,7 +229,7 @@ func (t *Desk) qiangKong(card byte, mask int64) bool {
 		//if !ok {
 		//var cards []byte = t.getHandCards(s)
 		//胡,杠碰,吃检测
-		v_h := t.DiscardHu(card, t.getHandCards(s), t.getChowCards(s), t.getPongCards(s), t.getKongCards(s), t.luckyCard) //胡
+		v_h := t.DiscardHu(card, t.getHandCards(s), t.getChowCards(s), t.getPongCards(s), t.getKongCards(s), t.luckyCard,s) //胡
 		if v_h > 0 {
 			t.unskipL(s) //抢杠玩家一定过圈
 			t.opt[s] = v_h | algorithm.QIANG_GANG
@@ -471,7 +471,7 @@ func(t *Desk) DrawDetect(card byte, cs []byte, ch, ps, ks []uint32, wildcard byt
 
 		if t.tianHe(seat) > 0{ //天胡
 			status = status | algorithm.TIAN_HU
-		}else if t.diHe() >0{//地胡
+		}else if t.diHe(seat) >0{//地胡
 			status = status | algorithm.DI_HU
 		}else if t.haidilaoHe()  >0{  // 海底捞
 			status = status | algorithm.HU_HAI_LAO
@@ -496,14 +496,14 @@ func(t *Desk) DrawDetect(card byte, cs []byte, ch, ps, ks []uint32, wildcard byt
 }
 
 // 打牌检测,胡牌, 接炮胡检测
-func (t *Desk) DiscardHu(card byte, cs []byte, ch, ps, ks []uint32, wildcard byte) int64 {
+func (t *Desk) DiscardHu(card byte, cs []byte, ch, ps, ks []uint32, wildcard byte,seat uint32) int64 {
 	// 财神不能接炮胡
 	if card == wildcard {
 		return 0
 	}
 	status := algorithm.ExistHu(cs, ch, ps, ks, wildcard, card)
 	if status > 0 {
-		if t.diHe() >0{//地胡
+		if t.diHe(seat) >0{//地胡
 			status = status | algorithm.DI_HU
 		}
 

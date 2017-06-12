@@ -39,7 +39,7 @@ func (t *Desk) discard_(card byte) {
 		}
 		var cards []byte = t.getHandCards(s)
 		//胡,杠碰,吃检测
-		v_h := t.DiscardHu(card, cards, t.getChowCards(s), t.getPongCards(s), t.getKongCards(s), t.luckyCard) //胡
+		v_h := t.DiscardHu(card, cards, t.getChowCards(s), t.getPongCards(s), t.getKongCards(s), t.luckyCard,s) //胡
 		if v_h > 0 && t.getSkip(s, v_h) { //是否过圈
 			t.opt[s] = v_h
 		}
