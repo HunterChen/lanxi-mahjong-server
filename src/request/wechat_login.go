@@ -8,7 +8,6 @@
 package request
 
 import (
-	"lib/socket"
 	"crypto/tls"
 	"data"
 	"encoding/json"
@@ -31,7 +30,7 @@ const refreshTockenUrl = "https://api.weixin.qq.com/sns/oauth2/refresh_token"
 
 func init() {
 
-	socket.Regist( &protocol.CWechatLogin{}, wechatLogin)
+	//socket.Regist( &protocol.CWechatLogin{}, wechatLogin)
 }
 
 type WechatRefreshTokenRet struct {
@@ -210,7 +209,7 @@ func wechatLogin(ctos *protocol.CWechatLogin, c interfacer.IConn) {
 				Userid:      userid,
 				Nickname:    ret.Nickname,
 				Create_ip:   ip,
-				RoomCard:     20000,
+				RoomCard:    20000,
 				Create_time: uint32(time.Now().Unix()),
 				Photo:       ret.HeadImagUrl,
 				Sex:         uint32(ret.Sex),

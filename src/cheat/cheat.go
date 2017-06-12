@@ -85,7 +85,7 @@ type RoomInfoReq struct {
 }
 
 func release(c echo.Context) error {
-	return c.JSON(http.StatusOK, H{"go version": runtime.Version(),"build time":BUILD_TIME,"version":VERSION,"run time":RUN_TIME})
+	return c.JSON(http.StatusOK, H{"go version": runtime.Version(),"build time":BUILD_TIME,"version":VERSION,"startup time":RUN_TIME})
 }
 func staticsHdl(c echo.Context) error {
 	//bs,err := json.Marshal(statics.GetSysmtemInfo())

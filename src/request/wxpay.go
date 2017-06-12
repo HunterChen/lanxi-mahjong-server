@@ -8,7 +8,6 @@
 package request
 
 import (
-	"lib/socket"
 	"lib/utils"
 	"csv"
 	"data"
@@ -26,9 +25,9 @@ import (
 
 func init() {
 
-	socket.Regist(&protocol.CWxpayOrder{}, wxOrder)
+	//socket.Regist(&protocol.CWxpayOrder{}, wxOrder)
 
-	socket.Regist(&protocol.CWxpayQuery{}, wxQuery)
+	//socket.Regist(&protocol.CWxpayQuery{}, wxQuery)
 }
 
 //微信支付查询
@@ -67,7 +66,7 @@ func wxOrder(ctos *protocol.CWxpayOrder, c interfacer.IConn) {
 	var waresid uint32 = ctos.GetId()
 	var body string = ctos.GetBody()
 	var userid string = c.GetUserid()
-	player:= players.Get(userid)
+	player := players.Get(userid)
 	var ipaddr uint32 = player.GetConn().GetIPAddr()
 	var ip string = utils.InetTontoa(ipaddr).String()
 	var parent string = player.GetBuild()
@@ -117,17 +116,17 @@ func wxpayOrder(waresid uint32, userid, ip, parent, body string) (string, string
 	//var ctime string = utils.Unix2Str(utils.Timestamp())
 	//transid,下单记录
 	t := &data.TradeRecord{
-		Id: orderid,
-		Transid: transid,
-		Userid: userid,
-		Itemid: itemid,
-		Amount: "1",
-		Diamond: diamond,
-		Money: price,
-		Ctime: time.Now().Unix(),
-		Result: 2, //2=下单状态
+		Id:       orderid,
+		Transid:  transid,
+		Userid:   userid,
+		Itemid:   itemid,
+		Amount:   "1",
+		Diamond:  diamond,
+		Money:    price,
+		Ctime:    time.Now().Unix(),
+		Result:   2, //2=下单状态
 		Clientip: ip,
-		Parent: parent,
+		Parent:   parent,
 	}
 	err = t.Save() //TODO:优化,未支付订单
 	if err != nil {
