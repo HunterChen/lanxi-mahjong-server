@@ -50,7 +50,7 @@ run_robot() {
     if [ "$PID" != '' ]; then
 	    echo "robot already runing PID : $PID"
     else
-	    nohup ./server -log_dir="log" >/dev/null 2>error.log &
+	    nohup ./robot -log_dir="log" >/dev/null 2>1 &
 	    sleep 3s
 	    PID=`get_pid_robot`
 	    echo "runing robot PID : $PID"
@@ -58,27 +58,27 @@ run_robot() {
 }
 
 show() {
-    ps aux | grep -v grep | grep -v ssdb | grep './server -log_dir=log'
+    ps aux | grep -v grep |  grep './server -log_dir=log'
 }
 
 show_admin() {
-    ps aux | grep -v grep | grep -v ssdb | grep './admin -log_dir=log'
+    ps aux | grep -v grep |  grep './admin -log_dir=log'
 }
 
 show_robot() {
-    ps aux | grep -v grep | grep -v ssdb | grep './server -log_dir=log'
+    ps aux | grep -v grep |  grep './robot -log_dir=log'
 }
 
 get_pid() {
-    ps aux | grep -v grep | grep -v ssdb | grep './server -log_dir=log' | awk '{print $2}'
+    ps aux | grep -v grep |  grep './server -log_dir=log' | awk '{print $2}'
 }
 
 get_pid_admin() {
-    ps aux | grep -v grep | grep -v ssdb | grep './admin -log_dir=log' | awk '{print $2}'
+    ps aux | grep -v grep |  grep './admin -log_dir=log' | awk '{print $2}'
 }
 
 get_pid_robot() {
-    ps aux | grep -v grep | grep -v ssdb | grep './server -log_dir=log' | awk '{print $2}'
+    ps aux | grep -v grep |  grep './robot -log_dir=log' | awk '{print $2}'
 }
 
 stop() {
