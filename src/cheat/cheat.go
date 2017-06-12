@@ -17,6 +17,7 @@ import (
 	"resource"
 	"cheat/statics"
 	"runtime"
+	"time"
 )
 
 //用于测试指定房间牌型
@@ -32,6 +33,7 @@ type RoomCheat struct {
 var (
 	VERSION = "0.0.1"
 	BUILD_TIME      = ""
+	RUN_TIME      = time.Now().Format("2006-01-02 15:04:05")
 )
 
 func Run(port string) {
@@ -83,7 +85,7 @@ type RoomInfoReq struct {
 }
 
 func release(c echo.Context) error {
-	return c.JSON(http.StatusOK, H{"go version": runtime.Version(),"build time":BUILD_TIME,"version":VERSION})
+	return c.JSON(http.StatusOK, H{"go version": runtime.Version(),"build time":BUILD_TIME,"version":VERSION,"run time":RUN_TIME})
 }
 func staticsHdl(c echo.Context) error {
 	//bs,err := json.Marshal(statics.GetSysmtemInfo())

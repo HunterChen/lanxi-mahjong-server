@@ -32,7 +32,7 @@ import (
 )
 
 var (
-	VERSION = "0.0.1"
+	VERSION = "0.0.0"
 	BUILD_TIME      = ""
 )
 
