@@ -23,12 +23,11 @@ const (
 	OFFLINE = "offline"
 )
 
-func newConnection(ip uint32, socket *websocket.Conn) *Connection {
+func newConnection(socket *websocket.Conn) *Connection {
 	c := &Connection{
 		writeChan: make(chan interfacer.IProto, 32),
 		ws:        socket,
 		ReadChan:  make(chan *Packet, 32),
-		ipAddr:    ip,
 		connected: true,
 		closeChan: make(chan bool, 1),
 	}
@@ -140,6 +139,23 @@ func (c *Connection) ReadPump() {
 		})
 	//声明一个临时缓冲区，用来存储被截断的数据
 	tmpBuffer := make([]byte, 0, HeaderLen+1)
+
+	//--------------------反向代理服传送过来的IP-------------------------
+	_, message, err := c.ws.ReadMessage()
+	if err != nil {
+		return
+	}
+
+	if string(message[:4]) == "YiYu"{
+		c.ipAddr = DecodeUint32(message[4:])
+	}else{
+		tmpBuffer, err = Unpack(append(tmpBuffer, message...), c.ReadChan)
+		if err != nil {
+			glog.Errorln("Unpack error ", err)
+			return
+		}
+	}
+	//------------------------------------------------------------------
 	for {
 		_, message, err := c.ws.ReadMessage()
 		if err != nil {

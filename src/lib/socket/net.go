@@ -8,9 +8,7 @@
 package socket
 
 import (
-	"lib/utils"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/golang/glog"
@@ -59,54 +57,16 @@ func wSHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 	if r.Method != "GET" {
-		glog.Errorln(r.Method)
 		return
 	}
-	// LoginData := r.Header.Get("LoginData")
-	//glog.Infoln("====LoginData====",LoginData)
-	//
-	//pb:= &protocol.LoginData{}
-	//err:=proto.Unmarshal([]byte(LoginData),pb)
-	//
-	//if err != nil{
-	//	w.Write([]byte("3"))
-	//}
-	//glog.Infoln("====LoginData====",*pb)
-	// if !verifyToken(r.Header.Get("Token")) {
-	// 	return
-	// }
 	socket, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		glog.Errorln(err)
 		return
 	}
 
-	ipaddress := utils.InetToaton(strings.Split(r.RemoteAddr, ":")[0])
-	c := newConnection(ipaddress, socket)
+	c := newConnection(socket)
 	go c.Reader(c.ReadChan)
 	go c.LoginTimeout()
 	go c.WritePump()
 	c.ReadPump()
-}
-
-func verifyToken(Token string) bool {
-	// client
-	// Key := "XG0e2Ye/KAUJRXaMNnJ5UH1haBvh2FXOoAggE6f2Utw"
-	// Now := strconv.Itoa(int(utils.Timestamp()))
-	// Sign := utils.Md5(Key+Now)
-	// Token := Sign+Now+Phone
-	// r.Header.Set("Token")
-	// server
-	Key := "XG0e2Ye/KAUJRXaMNnJ5UH1haBvh2FXOoAggE6f2Utw"
-	// Token := r.Header.Get("Token")
-	// r.Header.Del("Token")
-	TokenB := []byte(Token)
-	if len(TokenB) >= 42 {
-		SignB := TokenB[:32]
-		TimeB := TokenB[32:42]
-		if utils.Md5(Key+string(TimeB)) == string(SignB) {
-			return true
-		}
-	}
-	return false
 }

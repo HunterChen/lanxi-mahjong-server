@@ -67,17 +67,6 @@ func pprof() {
 	}
 }
 
-// 支付回调监听服务
-func payRecvServe() {
-	if config.Opts().Pay_port != "" {
-		//go http.ListenAndServe("0.0.0.0:"+strconv.Itoa(data.Conf.PayPort), nil)
-		err := http.ListenAndServeTLS(config.Opts().Pay_port, "./cert.pem", "./key.pem", nil)
-		glog.Infoln("支付监控端口:", config.Opts().Pay_port)
-		if err != nil {
-			glog.Fatal("ListenAndServe error: ", err)
-		}
-	}
-}
 
 func gamesignalProc(ln net.Listener, lnCh chan error) {
 	defer func() {
