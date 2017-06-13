@@ -50,7 +50,7 @@ run_robot() {
     if [ "$PID" != '' ]; then
 	    echo "robot already runing PID : $PID"
     else
-	    nohup ./robot -log_dir="log" >/dev/null 2>1 &
+	    nohup ./robot -log_dir="log" >/dev/null 2>&1 &
 	    sleep 3s
 	    PID=`get_pid_robot`
 	    echo "runing robot PID : $PID"
