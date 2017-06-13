@@ -5,7 +5,7 @@ import (
 	"game/interfacer"
 	"game/players"
 	"protocol"
-	"game/desk"
+	"game/room"
 	"code.google.com/p/goprotobuf/proto"
 )
 
@@ -18,7 +18,7 @@ func init() {
 func chattext(ctos *protocol.CBroadcastChatText, c interfacer.IConn) {
 	stoc := &protocol.SBroadcastChatText{}
 	player := players.Get(c.GetUserid())
-	rdata := desk.Get(player.GetInviteCode())
+	rdata := room.Get(player.GetInviteCode())
 	if rdata != nil {
 		seat := player.GetSeat()
 		stoc.Seat = &seat
@@ -36,7 +36,7 @@ func chattext(ctos *protocol.CBroadcastChatText, c interfacer.IConn) {
 func chatsound(ctos *protocol.CBroadcastChat, c interfacer.IConn) {
 	stoc := &protocol.SBroadcastChat{}
 	player := players.Get(c.GetUserid())
-	rdata := desk.Get(player.GetInviteCode())
+	rdata := room.Get(player.GetInviteCode())
 	if rdata != nil {
 		seat := player.GetSeat()
 		stoc.Seat = &seat

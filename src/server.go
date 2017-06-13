@@ -2,7 +2,7 @@ package main
 
 import (
 	"game/data"
-	"game/desk"
+	"game/room"
 	"flag"
 	"net"
 	"net/http"
@@ -83,7 +83,7 @@ func gamesignalProc(ln net.Listener, lnCh chan error) {
 			//关闭连接
 			socket.Close()
 			//关闭服务
-			desk.Close()
+			room.Close()
 			//players.Close()
 			//延迟退出，等待连接关闭，数据回存
 			glog.Infof("get sig -> %v\n", msg)

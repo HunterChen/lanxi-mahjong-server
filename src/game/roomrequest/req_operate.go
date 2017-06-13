@@ -4,7 +4,7 @@ import (
 	"protocol"
 	"game/interfacer"
 	"game/players"
-	"game/desk"
+	"game/room"
 	"github.com/golang/glog"
 	"code.google.com/p/goprotobuf/proto"
 	"lib/socket"
@@ -20,7 +20,7 @@ func operate(ctos *protocol.COperate, c interfacer.IConn) {
 	var card uint32 = ctos.GetCard()
 	var value int64 = ctos.GetValue()
 	player := players.Get(c.GetUserid())
-	rdata := desk.Get(player.GetInviteCode())
+	rdata := room.Get(player.GetInviteCode())
 	if rdata == nil {
 		stoc.Error = proto.Uint32(uint32(protocol.Error_NotInRoom))
 		c.Send(stoc)

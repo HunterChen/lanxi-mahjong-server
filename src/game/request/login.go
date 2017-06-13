@@ -5,7 +5,7 @@ import (
 	"lib/socket"
 	"lib/utils"
 	"game/data"
-	"game/desk"
+	"game/room"
 
 	"game/interfacer"
 	"game/players"
@@ -75,7 +75,7 @@ func logining(member *data.User, c interfacer.IConn) {
 		conn.Close()
 	} else {
 		// 登陆成功把用户的数据从数据库取出存入服务内存
-		userdata = desk.NewPlayer(member)
+		userdata = room.NewPlayer(member)
 		players.Set(userdata.GetUserid(), userdata)
 	}
 	userdata.SetConn(c)
@@ -83,7 +83,7 @@ func logining(member *data.User, c interfacer.IConn) {
 	c.SetLogin()
 
 
-	rdata := desk.Get(userdata.GetInviteCode())
+	rdata := room.Get(userdata.GetInviteCode())
 	if rdata!= nil{
 		rdata.Offline(userdata.GetSeat(),false)
 	}

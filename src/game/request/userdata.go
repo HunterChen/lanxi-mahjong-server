@@ -10,7 +10,7 @@ import (
 	"github.com/golang/glog"
 	"code.google.com/p/goprotobuf/proto"
 	"game/players"
-	"game/desk"
+	"game/room"
 )
 
 func init() {
@@ -36,7 +36,7 @@ func getUserDataHdr(ctos *protocol.CUserData, c interfacer.IConn) {
 		photo,_:= user.GetPhotoFromDB()
 		stoc.Data.Photo = proto.String(photo)
 		// 再次认证是否在房间并判断房间是否过期
-		if userdata.GetInviteCode() != "" && desk.Get(userdata.GetInviteCode()) != nil {
+		if userdata.GetInviteCode() != "" && room.Get(userdata.GetInviteCode()) != nil {
 			//glog.Infoln("已经在私人局", userdata.GetInviteCode())
 			stoc.Data.Roomtype = proto.Uint32(userdata.GetRoomType())
 			stoc.Data.Invitecode = proto.String(userdata.GetInviteCode())

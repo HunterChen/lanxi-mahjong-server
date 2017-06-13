@@ -5,7 +5,7 @@ import (
 	"game/interfacer"
 	"game/players"
 	"protocol"
-	"game/desk"
+	"game/room"
 
 	"code.google.com/p/goprotobuf/proto"
 )
@@ -21,7 +21,7 @@ func init() {
 func launchVote(ctos *protocol.CLaunchVote, c interfacer.IConn) {
 	//TODO:优化
 	player := players.Get(c.GetUserid())
-	rdata := desk.Get(player.GetInviteCode())
+	rdata := room.Get(player.GetInviteCode())
 	//
 	seat := player.GetSeat()
 	stoc := &protocol.SLaunchVote{Seat: proto.Uint32(seat)}
@@ -42,7 +42,7 @@ func launchVote(ctos *protocol.CLaunchVote, c interfacer.IConn) {
 func vote(ctos *protocol.CVote, c interfacer.IConn) {
 	//TODO:优化
 	player := players.Get(c.GetUserid())
-	rdata := desk.Get(player.GetInviteCode())
+	rdata := room.Get(player.GetInviteCode())
 	//
 	seat := player.GetSeat()
 	var vote uint32 = ctos.GetVote() //0同意,1不同意

@@ -1,4 +1,4 @@
-package desk
+package room
 
 import (
 	"game/interfacer"

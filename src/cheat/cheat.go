@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"game/algorithm"
 	"config"
-	"game/desk"
+	"game/room"
 	"github.com/golang/glog"
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo"
@@ -100,7 +100,7 @@ func printroominfo(c echo.Context) error {
 		return c.JSON(http.StatusOK, H{"code": 1007})
 	}
 
-	r := desk.Get(strconv.Itoa(roomInfoReq.RoomId))
+	r := room.Get(strconv.Itoa(roomInfoReq.RoomId))
 
 	if r == nil {
 		return c.JSON(http.StatusOK, H{"msg": "房间不存在"})
@@ -175,7 +175,7 @@ func create(c echo.Context) error {
 		glog.Errorln("json.Unmarshal failed ", err)
 		return c.JSON(http.StatusOK, H{"msg": err.Error()})
 	}
-	r := desk.Get(strconv.Itoa(ar.RoomId))
+	r := room.Get(strconv.Itoa(ar.RoomId))
 
 	glog.Errorln("_______邀请机器人进入房间--------", r, ar.RoomId)
 	if r == nil {
@@ -290,7 +290,7 @@ func autoCreate(c echo.Context) error {
 		glog.Errorln("json.Unmarshal failed ", err)
 		return c.JSON(http.StatusOK, H{"msg": err.Error()})
 	}
-	r := desk.Get(strconv.Itoa(ar.RoomId))
+	r := room.Get(strconv.Itoa(ar.RoomId))
 
 	glog.Errorln("_______邀请机器人进入房间--------", r, ar.RoomId)
 	if r == nil {

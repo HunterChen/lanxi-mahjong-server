@@ -5,7 +5,7 @@ import (
 	"game/interfacer"
 	"game/players"
 	"code.google.com/p/goprotobuf/proto"
-	"game/desk"
+	"game/room"
 	"lib/socket"
 	"config"
 )
@@ -22,7 +22,7 @@ func maizi(ctos *protocol.CMaiZi, c interfacer.IConn) {
 		c.Send(stoc)
 		return
 	}
-	rdata := desk.Get(player.GetInviteCode())
+	rdata := room.Get(player.GetInviteCode())
 	if rdata == nil {
 		player.ClearRoom()
 		stoc.Error = proto.Uint32(uint32(protocol.Error_RoomNotExist))

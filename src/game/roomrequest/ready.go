@@ -5,7 +5,7 @@ import (
 	"game/interfacer"
 	"game/players"
 	"protocol"
-	"game/desk"
+	"game/room"
 	"code.google.com/p/goprotobuf/proto"
 )
 
@@ -16,7 +16,7 @@ func init() {
 // 玩家准备
 func ready(ctos *protocol.CReady, c interfacer.IConn) {
 	player := players.Get(c.GetUserid())
-	rdata := desk.Get(player.GetInviteCode())
+	rdata := room.Get(player.GetInviteCode())
 	stoc := &protocol.SReady{}
 	if rdata == nil {
 		stoc.Error = proto.Uint32(uint32(protocol.Error_NotInRoom))

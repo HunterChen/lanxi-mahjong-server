@@ -4,7 +4,7 @@ import (
 	"protocol"
 	"game/interfacer"
 	"game/players"
-	"game/desk"
+	"game/room"
 	"game/algorithm"
 	"github.com/golang/glog"
 	"code.google.com/p/goprotobuf/proto"
@@ -22,7 +22,7 @@ func hu(ctos *protocol.CHu, c interfacer.IConn) {
 	stoc := &protocol.SHu{}
 	//TODO:优化
 	player := players.Get(c.GetUserid())
-	rdata := desk.Get(player.GetInviteCode())
+	rdata := room.Get(player.GetInviteCode())
 	//
 	if rdata != nil {
 		seat := player.GetSeat()
@@ -39,7 +39,7 @@ func qiangkong(ctos *protocol.CQiangKong, c interfacer.IConn) {
 	stoc := &protocol.SQiangKong{}
 	//TODO:优化
 	player := players.Get(c.GetUserid())
-	rdata := desk.Get(player.GetInviteCode())
+	rdata := room.Get(player.GetInviteCode())
 	//
 	if rdata != nil {
 		seat := player.GetSeat()

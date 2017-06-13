@@ -5,7 +5,7 @@ import (
 	"protocol"
 	"game/interfacer"
 	"game/players"
-	"game/desk"
+	"game/room"
 	"lib/utils"
 	"game/data"
 	"lib/socket"
@@ -20,7 +20,7 @@ func init() {
 func create(ctos *protocol.CCreatePrivateRoom, c interfacer.IConn) {
 	stoc := &protocol.SCreatePrivateRoom{}
 	player := players.Get(c.GetUserid())
-	rdata := desk.Get(player.GetInviteCode())
+	rdata := room.Get(player.GetInviteCode())
 	if rdata != nil {
 		// 如果该玩家已经在私人局直接进入
 		code := rdata.Enter(player)
@@ -49,7 +49,7 @@ func create(ctos *protocol.CCreatePrivateRoom, c interfacer.IConn) {
 
 	expire := uint32(utils.Timestamp()) + round*600
 
-	code := desk.GenInvitecode(10)
+	code := room.GenInvitecode(10)
 	roomid, _ := data.GenRoomID()
 
 	var cost uint32
@@ -69,7 +69,7 @@ func create(ctos *protocol.CCreatePrivateRoom, c interfacer.IConn) {
 		return
 	}
 
-	r := desk.NewDeskData(uint32(roomid), round, expire, config.Opts().Ante, cost, creator, code, ctos.GetMaizi())
+	r := room.NewDeskData(uint32(roomid), round, expire, config.Opts().Ante, cost, creator, code, ctos.GetMaizi())
 	roomdata := &protocol.RoomData{
 		Roomid:     proto.Uint32(uint32(roomid)),
 		Rtype:      ctos.Rtype,
@@ -82,8 +82,8 @@ func create(ctos *protocol.CCreatePrivateRoom, c interfacer.IConn) {
 		Maizi:      ctos.Maizi,
 	}
 	player.SetLongitudeLatitude(ctos.GetLongitude(), ctos.GetLatitude())
-	rdata = desk.NewDesk(r)
-	desk.Add(code, rdata)
+	rdata = room.NewDesk(r)
+	room.Add(code, rdata)
 
 	stoc.Rdata = roomdata
 	c.Send(stoc)

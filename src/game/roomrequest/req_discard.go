@@ -4,7 +4,7 @@ import (
 	"protocol"
 	"game/interfacer"
 	"game/players"
-	"game/desk"
+	"game/room"
 	"code.google.com/p/goprotobuf/proto"
 	"lib/socket"
 )
@@ -17,7 +17,7 @@ func init() {
 func discard(ctos *protocol.CDiscard, c interfacer.IConn) {
 	stoc := &protocol.SDiscard{}
 	player := players.Get(c.GetUserid())
-	rdata := desk.Get(player.GetInviteCode())
+	rdata := room.Get(player.GetInviteCode())
 	if rdata == nil {
 		stoc.Error = proto.Uint32(uint32(protocol.Error_NotInRoom))
 		c.Send(stoc)
