@@ -6,23 +6,7 @@ import (
 )
 
 const (
-	RESTYPE1  uint32 = iota //普通场抽成
-	RESTYPE2                //普通场打牌
-	RESTYPE3                //比赛场
-	RESTYPE4                //私人局
-	RESTYPE5                //破产
-	RESTYPE6                //充值
-	RESTYPE7                //签到
-	RESTYPE8                //Vip
-	RESTYPE9                //邮件
-	RESTYPE10               //购买
-	RESTYPE11               //兑换
-	RESTYPE12               //结算
-	RESTYPE13               //活动领奖
-	RESTYPE14               //排行榜
-	RESTYPE15               //任务
-	RESTYPE16               //绑定奖励
-	RESTYPE17               //后台
+	RESTYPE4      =4          //私人局
 )
 
 type DataResChange struct {
