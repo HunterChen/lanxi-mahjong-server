@@ -25,9 +25,9 @@ const (
 
 func newConnection(socket *websocket.Conn) *Connection {
 	c := &Connection{
-		writeChan: make(chan interfacer.IProto, 32),
+		writeChan: make(chan interfacer.IProto, 128),
 		ws:        socket,
-		ReadChan:  make(chan *Packet, 32),
+		ReadChan:  make(chan *Packet, 128),
 		connected: true,
 		closeChan: make(chan bool, 1),
 	}
@@ -138,22 +138,30 @@ func (c *Connection) ReadPump() {
 			return nil
 		})
 	//声明一个临时缓冲区，用来存储被截断的数据
-	tmpBuffer := make([]byte, 0, HeaderLen+1)
-
+	tmpBuffer := make([]byte, 10*1024)
+	var length uint32
 	//--------------------反向代理服传送过来的IP-------------------------
 	_, message, err := c.ws.ReadMessage()
 	if err != nil {
 		return
 	}
 
+	//
 	if string(message[:4]) == "YiYu"{
 		c.ipAddr = DecodeUint32(message[4:])
 	}else{
-		tmpBuffer, err = Unpack(append(tmpBuffer, message...), c.ReadChan)
-		if err != nil {
-			glog.Errorln("Unpack error ", err)
-			return
+		copy(tmpBuffer[length:],message)
+		length +=uint32( len(message))
+		readCount := Unpack(tmpBuffer,length, c.ReadChan)
+
+		reminder:= length - readCount
+		if reminder <0{
+			reminder = 0
 		}
+		if length - readCount > 0{
+			copy(tmpBuffer,tmpBuffer[readCount:reminder])
+		}
+		length = reminder
 	}
 	//------------------------------------------------------------------
 	for {
@@ -161,11 +169,18 @@ func (c *Connection) ReadPump() {
 		if err != nil {
 			return
 		}
-		tmpBuffer, err = Unpack(append(tmpBuffer, message...), c.ReadChan)
-		if err != nil {
-			glog.Errorln("Unpack error ", err)
-			return
+		copy(tmpBuffer[length:],message)
+		length +=uint32( len(message))
+		readCount := Unpack(tmpBuffer,length, c.ReadChan)
+
+		reminder:= length - readCount
+		if reminder <0{
+			reminder = 0
 		}
+		if length - readCount > 0{
+			copy(tmpBuffer,tmpBuffer[readCount:reminder])
+		}
+		length = reminder
 	}
 }
 

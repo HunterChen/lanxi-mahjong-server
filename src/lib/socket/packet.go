@@ -47,38 +47,29 @@ func Pack(proto uint32, message []byte, count uint32) []byte {
 }
 
 //解包
-func Unpack(buffer []byte, readerChannel chan *Packet) ([]byte, error) {
-	length := uint32(len(buffer))
+func Unpack(buffer []byte, length uint32 ,readerChannel chan *Packet) uint32 {
 	var i uint32
 	for i = 0; i < length; {
 		// 包头都不足
 		if length < i+HANDDLen {
 			break
 		}
-		buf := buffer[i:1]
-		count := uint32(buf[0])
+		count := uint32(buffer[i])
 		// 读取信息数据长度
 		messageLength := DecodeUint32(buffer[i+HeaderLen+PROTOLen : i+HANDDLen])
-
 		// 只有包头，数据不足一包
 		if length < i+HANDDLen+messageLength {
 			break
 		}
-		// 读取整包信息数据
-		data := buffer[i+HANDDLen : i+HANDDLen+messageLength]
-
 		p := &Packet{
 			proto:   DecodeUint32(buffer[i+HeaderLen : i+HANDDLen]),
-			content: data,
+			content: make([]byte,messageLength),
 			count:   count,
 		}
-		readerChannel <- p
+		// 读取整包信息数据
+		copy(p.content, buffer[i+HANDDLen : i+HANDDLen+messageLength])
 		i += HANDDLen + messageLength
+		readerChannel <- p
 	}
-	// 刚好整包，包括2,3,4...个包
-	if i == length {
-		return make([]byte, 0, HeaderLen+1), nil
-	}
-	// 不足一包，或者残包余数
-	return buffer[i:], nil
+	return i
 }

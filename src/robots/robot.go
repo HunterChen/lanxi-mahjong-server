@@ -144,16 +144,25 @@ func (this *Robot) RecvMsg() {
 		this.Close()
 		this.Closed()
 	}()
+
+	tmpBuffer := make([]byte, 10*1024)
+	var length uint32
 	for {
-		_, message, err := this.conn.ReadMessage()
+		_, message, err :=this.conn.ReadMessage()
 		if err != nil {
-			glog.Infof("read error -> %s, %v", this.data.Phone, err)
 			return
 		}
-		_, err = socket.Unpack(message, this.readCh)
-		if err != nil {
-			glog.Errorf("Unpack err -> %v", err)
+		copy(tmpBuffer[length:],message)
+		length +=uint32( len(message))
+		readCount := socket.Unpack(tmpBuffer,length, this.readCh)
+		reminder:= length - readCount
+		if reminder <0{
+			reminder = 0
 		}
+		if length - readCount > 0{
+			copy(tmpBuffer,tmpBuffer[readCount:reminder])
+		}
+		length = reminder
 	}
 }
 
