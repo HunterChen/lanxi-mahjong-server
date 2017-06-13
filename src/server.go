@@ -1,15 +1,8 @@
-/**********************************************************
- * Author        : Michael
- * Email         : dolotech@163.com
- * Last modified : 2016-01-23 10:02
- * Filename      : server.go
- * Description   : 服务器主文件
- * *******************************************************/
 package main
 
 import (
-	"data"
-	"desk"
+	"game/data"
+	"game/desk"
 	"flag"
 	"net"
 	"net/http"
@@ -21,9 +14,9 @@ import (
 	"github.com/golang/glog"
 	"config"
 	"cheat"
-	"csv"
-	_ "roomrequest"
-	_"request"
+	"game/csv"
+	_ "game/roomrequest"
+	_"game/request"
 	"lib/socket"
 	"fmt"
 )

@@ -9,7 +9,7 @@ package socket
 
 import (
 	"lib/event"
-	"interfacer"
+	"game/interfacer"
 	"runtime/debug"
 	"time"
 

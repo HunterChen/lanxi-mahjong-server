@@ -13,7 +13,7 @@ import (
 
 	"github.com/golang/glog"
 	"code.google.com/p/goprotobuf/proto"
-	"interfacer"
+	"game/interfacer"
 )
 
 type handler struct {

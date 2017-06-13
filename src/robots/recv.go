@@ -1,11 +1,7 @@
-/**********************************************************
- * Last modified : 2017-01-16 10:00
- * Description   : 机器人
- * *******************************************************/
 package robots
 
 import (
-	"algorithm"
+	"game/algorithm"
 	"protocol"
 
 	"github.com/golang/glog"

@@ -1,8 +1,3 @@
-//
-// Author: Michael
-// Date: 2016-05-14 10:31:32
-//
-
 package config
 
 import (

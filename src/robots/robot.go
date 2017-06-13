@@ -1,14 +1,9 @@
-/**********************************************************
- * Last modified : 2017-01-16 10:00
- * Filename      : robots.go
- * Description   : 机器人
- * *******************************************************/
 package robots
 
 import (
 	"lib/utils"
 	"lib/socket"
-	"interfacer"
+	"game/interfacer"
 	"net/url"
 	"reflect"
 	"time"

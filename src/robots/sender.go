@@ -1,8 +1,3 @@
-/**********************************************************
- * Last modified : 2017-01-16 10:00
- * Filename      : sender.go
- * Description   : 机器人
- * *******************************************************/
 package robots
 
 import (
@@ -12,7 +7,7 @@ import (
 	"protocol"
 
 	"code.google.com/p/goprotobuf/proto"
-	"algorithm"
+	"game/algorithm"
 	"github.com/golang/glog"
 )
 

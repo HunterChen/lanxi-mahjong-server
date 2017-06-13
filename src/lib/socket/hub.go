@@ -8,7 +8,7 @@
 package socket
 
 import (
-	"interfacer"
+	"game/interfacer"
 	"net"
 	"net/http"
 	"runtime/debug"
