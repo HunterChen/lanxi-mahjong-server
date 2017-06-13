@@ -8,10 +8,6 @@
 
 package socket
 
-import "errors"
-
-var HEADER_ERR = errors.New("header error")
-
 var HeaderLen uint32 = 1 //　包头长度
 var HANDDLen uint32 = 9
 
@@ -47,7 +43,7 @@ func Pack(proto uint32, message []byte, count uint32) []byte {
 }
 
 //解包
-func Unpack(buffer []byte, length uint32 ,readerChannel chan *Packet) uint32 {
+func Unpack(buffer []byte, length uint32, readerChannel chan *Packet) uint32 {
 	var i uint32
 	for i = 0; i < length; {
 		// 包头都不足
@@ -56,18 +52,18 @@ func Unpack(buffer []byte, length uint32 ,readerChannel chan *Packet) uint32 {
 		}
 		count := uint32(buffer[i])
 		// 读取信息数据长度
-		messageLength := DecodeUint32(buffer[i+HeaderLen+PROTOLen : i+HANDDLen])
+		messageLength := DecodeUint32(buffer[i+HeaderLen+PROTOLen: i+HANDDLen])
 		// 只有包头，数据不足一包
 		if length < i+HANDDLen+messageLength {
 			break
 		}
 		p := &Packet{
-			proto:   DecodeUint32(buffer[i+HeaderLen : i+HANDDLen]),
-			content: make([]byte,messageLength),
+			proto:   DecodeUint32(buffer[i+HeaderLen: i+HANDDLen]),
+			content: make([]byte, messageLength),
 			count:   count,
 		}
 		// 读取整包信息数据
-		copy(p.content, buffer[i+HANDDLen : i+HANDDLen+messageLength])
+		copy(p.content, buffer[i+HANDDLen: i+HANDDLen+messageLength])
 		i += HANDDLen + messageLength
 		readerChannel <- p
 	}
