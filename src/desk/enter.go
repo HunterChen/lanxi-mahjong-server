@@ -12,7 +12,7 @@ func (t *Desk) Enter(p interfacer.IPlayer) int32 {
 
 	for k, v := range t.players {
 		if p.GetUserid() == v.GetUserid() {
-			p.SetRoom( t.id, k, t.data.Code)
+			p.SetRoom(t.id, k, t.data.Code)
 			round, expire := t.getRound()
 			// 判断玩家是否已经在房间
 			msg1 := t.res_reEnter(t.id, k, round, expire,

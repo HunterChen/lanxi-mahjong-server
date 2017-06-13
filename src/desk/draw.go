@@ -3,14 +3,13 @@ package desk
 import (
 	"algorithm"
 	"time"
-	"github.com/golang/glog"
 )
 
 //模牌,kong==false普通摸牌,kong==true扛后摸牌
 func (t *Desk) drawcard() {
 	<-time.After(time.Millisecond * 100)
 	if len(t.cards) == 0 {
-		t.he(0,0) //结束牌局
+		t.he(0, 0) //结束牌局
 	}
 
 	var value uint32 = 0
@@ -26,7 +25,7 @@ func (t *Desk) drawcard() {
 	}
 	//t.skip_(seat, t.seat) //过圈
 	t.unskipL(t.seat) //摸牌一定过圈
-	t.operateInit()  //清除操作记录
+	t.operateInit()   //清除操作记录
 	var card byte = t.cards[0]
 	t.draw = card //设置摸牌状态
 	t.discard = 0 //清除打牌状态
@@ -34,10 +33,9 @@ func (t *Desk) drawcard() {
 	t.cards = t.cards[1:]
 	cards := t.in(t.seat, card)
 
-	v := t.DrawDetect(card, cards, t.getChowCards(t.seat), t.getPongCards(t.seat), t.getKongCards(t.seat), t.luckyCard,t.seat)
-	v|=algorithm.DetectKong(cards,t.getPongCards(t.seat),t.luckyCard)
+	v := t.DrawDetect(card, cards, t.getChowCards(t.seat), t.getPongCards(t.seat), t.getKongCards(t.seat), t.luckyCard, t.seat)
+	v |= algorithm.DetectKong(cards, t.getPongCards(t.seat), t.luckyCard)
 
-	glog.Infof("%b",v)
 	if v&algorithm.HU > 0 {
 		if t.kong {
 			v = v | algorithm.HU_KONG_FLOWER
@@ -48,9 +46,9 @@ func (t *Desk) drawcard() {
 	}
 
 	//其他玩家消息
-	msg1 := res_otherDraw(t.seat, value,uint32(len(t.cards)))
+	msg1 := res_otherDraw(t.seat, value, uint32(len(t.cards)))
 	//摸牌协议消息
-	msg2 := res_draw(value, v, card,uint32(len(t.cards)), cards)
+	msg2 := res_draw(value, v, card, uint32(len(t.cards)), cards)
 	//摸牌协议消息通知
 	for s, o := range t.players {
 		if s == t.seat {

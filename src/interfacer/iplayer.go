@@ -12,16 +12,7 @@ import "protocol"
 type IPlayer interface {
 	GetUserid() string
 	GetSeat() uint32
-	GetNickname() string
-	GetPhone() string
-
 	SetUserid(string)
-	SetNickname(string)
-	SetSex(uint32)
-	SetPwd(string)
-	SetReady(bool)
-	GetReady() bool
-
 	SetLongitudeLatitude(longitude,latitude float32)
 	ConverDataUser() *protocol.UserData
 	ConverProtoUser() *protocol.ProtoUser
@@ -39,8 +30,4 @@ type IPlayer interface {
 
 	GetRoomCard() uint32
 	SetRoomCard(uint32)
-
-	GetBuild() string
-	SetBuild(string)
-	UserSave()
 }

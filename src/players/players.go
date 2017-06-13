@@ -28,9 +28,9 @@ func init() {
 func Del(id string) {
 	list.Lock()
 	defer list.Unlock()
-	if p, ok := list.list[id]; ok {
-		p.UserSave() //
-	}
+	//if p, ok := list.list[id]; ok {
+		//p.UserSave() //
+	//}
 	delete(list.list, id)
 }
 
@@ -55,9 +55,9 @@ func Get(id string) interfacer.IPlayer {
 func Close() {
 	list.Lock()
 	defer list.Unlock()
-	for _, p := range list.list {
-		p.UserSave() //
-	}
+	//for _, p := range list.list {
+		//p.UserSave() //
+	//}
 	close(list.closeCh) //关闭
 }
 

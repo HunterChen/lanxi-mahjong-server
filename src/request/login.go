@@ -110,7 +110,7 @@ func logining(member *data.User, c interfacer.IConn) {
 	go func() {
 		active := &data.DataUserActive{Userid: member.Userid, IP: c.GetIPAddr()}
 		active.Login()
-		tradeOff(userdata) //发货失败订单检测
+		//tradeOff(userdata) //发货失败订单检测
 	}()
 
 }

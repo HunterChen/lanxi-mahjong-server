@@ -16,7 +16,6 @@ import (
 	"os"
 	"os/signal"
 	_ "net/http/pprof"
-	"request"
 	"runtime/debug"
 	"syscall"
 	"github.com/golang/glog"
@@ -46,7 +45,6 @@ func main() {
 	defer glog.Flush()
 	glog.Infoln("逻辑服务器端口:", config.Opts().Server_port)
 
-	request.WxLoginInit()
 	data.InitIDGen()
 	csv.InitShop()
 
