@@ -179,6 +179,7 @@ func (t *Desk) kong_(card1 uint32, value int64, seat uint32) bool {
 	t.kong = true //杠操作出牌标识
 	t.seat = seat //位置切换
 	if  t.qiangKong(card, value) {
+		t.operate++
 		t.turn() //抢杠操作
 	} else {
 		 t.drawcard() //摸牌

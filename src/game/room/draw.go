@@ -10,6 +10,7 @@ func (t *Desk) drawcard() {
 	<-time.After(time.Millisecond * 100)
 	if len(t.cards) == 0 {
 		t.he(0, 0) //结束牌局
+		return
 	}
 
 	var value uint32 = 0

@@ -53,7 +53,6 @@ func (t *Desk) gameStart() {
 
 	// 牌局开始扣除房主的房卡
 	for _, p := range t.players {
-		//p.SetReady(false) //设置人物游戏状态
 		if t.round == 0 && t.data.Cid == p.GetUserid(){
 			resource.ChangeRes(p, resource.ROOM_CARD, -1 * int32(t.data.Cost), data.RESTYPE4)
 		}
