@@ -60,14 +60,19 @@ func ExistHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 
 	// 七小对牌型胡牌检测
 	value := exist7pair(cards)
 	if value > 0 {
+		value |= HU
 		handPongKong := getHandPongKong(cards, ch, ps, ks, wildcard)
 		// 清一色检测
 		color := existOneSuit(handPongKong,wildcard)
 		if color > 0 {
 			value = color | value
 		}
-		value |= HU
-	}else if existHu3n2(cards, wildcard) {
+
+		tv := ExistNCaiNKe(cards, ch, ps, ks, wildcard)
+		value = value | tv
+		return value
+	}
+	if existHu3n2(cards, wildcard) {
 		value = HU
 	}
 	//是否3n+2牌型
