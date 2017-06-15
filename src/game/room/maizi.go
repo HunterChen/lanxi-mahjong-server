@@ -3,7 +3,6 @@ package room
 import (
 	"lib/utils"
 	"protocol"
-	"github.com/golang/glog"
 )
 
 func (t *Desk) MaiZi(seat, count uint32) int32 {
@@ -27,8 +26,8 @@ func (t *Desk) MaiZi(seat, count uint32) int32 {
 	}()
 
 	stoc := &protocol.SMaiZi{
-		Seat:&seat,
-		Count:&count,
+		Seat:  &seat,
+		Count: &count,
 	}
 	t.broadcast(stoc)
 	return 0

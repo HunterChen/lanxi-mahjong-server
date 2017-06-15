@@ -6,7 +6,6 @@ import (
 	"protocol"
 
 	"code.google.com/p/goprotobuf/proto"
-	"github.com/golang/glog"
 	"lib/utils"
 )
 
@@ -38,7 +37,6 @@ func res_discard(seat uint32, card byte) interfacer.IProto {
 	stoc.Seat = proto.Uint32(seat)
 	return stoc
 }
-
 
 func res_discard3(seat uint32, v int64, card byte) interfacer.IProto {
 	stoc := &protocol.SDiscard{}
@@ -137,11 +135,11 @@ func (t *Desk) res_enter(id, seat, round, expire, dealer uint32,
 	return stoc
 }
 
-func  (t *Desk) orderValue(seat uint32) int64 {
+func (t *Desk) orderValue(seat uint32) int64 {
 	s := t.seat
 
-	count:=0
-	for _,v:=range t.opt{
+	count := 0
+	for _, v := range t.opt {
 		if v&algorithm.HU > 0 {
 			count ++
 		}
@@ -155,28 +153,27 @@ func  (t *Desk) orderValue(seat uint32) int64 {
 			}
 
 			if t.opt[s]&algorithm.HU > 0 {
-				if s != seat{
-					return  0
+				if s != seat {
+					return 0
 				}
 				// 只给胡的操作，掩掉吃、碰和杠
-				value := t.opt[s]>> 7
+				value := t.opt[s] >> 7
 				value <<= 7
 				return value
 			}
 		}
 	}
 
-
 	// 提示碰和杠
 	for i := uint32(1); i <= 4; i++ {
 		if t.opt[i]&algorithm.KONG > 0 || t.opt[i]&algorithm.PENG > 0 {
-			if i != seat{
-				return  0
+			if i != seat {
+				return 0
 			}
-			return  t.opt[i]
+			return t.opt[i]
 		}
 	}
-	return  0
+	return 0
 }
 
 //重新进入房间响应消息
@@ -264,13 +261,13 @@ func (t *Desk) res_reEnter(id, seat, round, expire, dealer uint32,
 	stoc.LuckyCard = proto.Uint32(uint32(t.luckyCard))
 	value := t.opt[seat]
 
-	count:=0
-	for _,v:=range t.opt{
-		if v >0{
+	count := 0
+	for _, v := range t.opt {
+		if v > 0 {
 			count ++
 		}
 	}
-	if count > 1{
+	if count > 1 {
 		value = t.orderValue(seat)
 	}
 
@@ -339,7 +336,7 @@ func res_deal(v int64, dice uint32, cards []byte, luckyCard uint32) interfacer.I
 }
 
 //闲家响应消息
-func res_otherDraw(seat, value ,remainder uint32) interfacer.IProto {
+func res_otherDraw(seat, value, remainder uint32) interfacer.IProto {
 	stoc := &protocol.SOtherDraw{}
 	stoc.Seat = proto.Uint32(seat)
 	stoc.Kong = proto.Uint32(value)
@@ -348,7 +345,7 @@ func res_otherDraw(seat, value ,remainder uint32) interfacer.IProto {
 }
 
 //摸牌协议消息响应消息
-func res_draw(kong uint32, v int64, card byte, remainder uint32,cards []byte) interfacer.IProto {
+func res_draw(kong uint32, v int64, card byte, remainder uint32, cards []byte) interfacer.IProto {
 	stoc := &protocol.SDraw{}
 	stoc.Card = proto.Uint32(uint32(card))
 	stoc.Cards = cards
