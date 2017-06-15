@@ -1,10 +1,3 @@
-/**********************************************************
- * Author        : Michael
- * Email         : dolotech@163.com
- * Last modified : 2016-01-23 10:24
- * Filename      : net.go
- * Description   : 负通道读写数据，断线处理
- * *******************************************************/
 package socket
 
 import (
@@ -40,7 +33,7 @@ const (
 	writeWait      = 10 * time.Second
 	pongWait       = 60 * time.Second
 	pingPeriod     = 9 * time.Second
-	maxMessageSize = 1024 * 1024 * 30
+	maxMessageSize =10*1024
 	//连接建立后5秒内没有收到登陆请求，断开socket
 	waitForLogin = time.Second * 5
 )

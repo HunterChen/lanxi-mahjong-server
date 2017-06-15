@@ -1,10 +1,3 @@
-/**********************************************************
- * Author        : Michael
- * Email         : dolotech@163.com
- * Last modified : 2016-01-23 10:23
- * Filename      : hub.go
- * Description   : 负责用户登入登出和用户间消息广播
- * *******************************************************/
 package socket
 
 import (
@@ -145,9 +138,7 @@ func (h *hub) run() {
 				}
 				m.successChan <- result
 			}
-		case c := <-h.closeChan:
-			//TODO:退出处理
-			glog.Infoln("server closed -> ", c, " conns -> ", len(h.connections))
+		case  <-h.closeChan:
 			for _, c := range h.connections {
 				c.Close()
 			}

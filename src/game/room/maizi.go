@@ -9,7 +9,6 @@ import (
 func (t *Desk) MaiZi(seat, count uint32) int32 {
 	t.Lock() //房间加锁
 	defer t.Unlock()
-	glog.Infoln(seat,count)
 	if !t.data.MaiZi {
 		return int32(protocol.Error_BuyAlready)
 	}
@@ -32,6 +31,5 @@ func (t *Desk) MaiZi(seat, count uint32) int32 {
 		Count:&count,
 	}
 	t.broadcast(stoc)
-	glog.Infoln(stoc.String())
 	return 0
 }

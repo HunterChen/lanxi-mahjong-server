@@ -117,8 +117,6 @@ func (t *Desk) he(seat uint32, card byte) {
 	if !t.state {
 		return
 	}
-	glog.Errorln(seat)
-
 	t.qiangKongHe(seat, t.qiangKongCard) //抢杠胡处理
 	huangZhuang := seat == 0             //是否黄庄
 

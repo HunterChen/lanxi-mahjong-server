@@ -411,7 +411,6 @@ func res_over(seat, lian uint32,
 	stoc.LianCount = proto.Uint32(lian)
 	stoc.PaoSeat = proto.Uint32(paoSeat)
 	stoc.HuType = proto.Uint32(huType)
-	glog.Infoln(stoc.String())
 	return stoc
 }
 

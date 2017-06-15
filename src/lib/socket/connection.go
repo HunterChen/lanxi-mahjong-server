@@ -1,10 +1,3 @@
-/**********************************************************
- * Author        : Michael
- * Email         : dolotech@163.com
- * Last modified : 2016-01-23 12:15
- * Filename      : connection.go
- * Description   : 封装了每个玩家连接数据结构,负责对玩家的数据发送和接收
- * *******************************************************/
 package socket
 
 import (
@@ -140,30 +133,7 @@ func (c *Connection) ReadPump() {
 	//声明一个临时缓冲区，用来存储被截断的数据
 	tmpBuffer := make([]byte, 10*1024)
 	var length uint32
-	//--------------------反向代理服传送过来的IP-------------------------
-	_, message, err := c.ws.ReadMessage()
-	if err != nil {
-		return
-	}
 
-	//
-	if string(message[:4]) == "YiYu"{
-		c.ipAddr = DecodeUint32(message[4:])
-	}else{
-		copy(tmpBuffer[length:],message)
-		length +=uint32( len(message))
-		readCount := Unpack(tmpBuffer,length, c.ReadChan)
-
-		reminder:= length - readCount
-		if reminder <0{
-			reminder = 0
-		}
-		if length - readCount > 0{
-			copy(tmpBuffer,tmpBuffer[readCount:reminder])
-		}
-		length = reminder
-	}
-	//------------------------------------------------------------------
 	for {
 		_, message, err := c.ws.ReadMessage()
 		if err != nil {

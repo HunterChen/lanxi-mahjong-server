@@ -1,10 +1,3 @@
-/**********************************************************
- * Author        : Michael
- * Email         : dolotech@163.com
- * Last modified : 2016-04-30 09:40
- * Filename      : utils.go
- * Description   : 常用的工具方法
- * *******************************************************/
 package utils
 
 import (
@@ -23,30 +16,6 @@ import (
 	"unicode/utf8"
 )
 
-// USE AT YOUR OWN RISK
-
-// String force casts a []byte to a string.
-//func String(b []byte) string {
-//	var s string
-//	pbytes := (*reflect.SliceHeader)(unsafe.Pointer(&b))
-//	pstring := (*reflect.StringHeader)(unsafe.Pointer(&s))
-//	pstring.Data = pbytes.Data
-//	pstring.Len = pbytes.Len
-//	return s
-//}
-
-//Bytes force casts a string to a []byte
-//禁止对返回的[]byte修改，否则报运行时错误
-//func Bytes(s string) (b []byte) {
-//	pbytes := (*reflect.SliceHeader)(unsafe.Pointer(&b))
-//	pstring := (*reflect.StringHeader)(unsafe.Pointer(&s))
-//	pbytes.Data = pstring.Data
-//	pbytes.Len = pstring.Len
-//	pbytes.Cap = pstring.Len
-//	return
-//}
-//
-// Auth
 func GetAuth() []rune {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	var list []rune

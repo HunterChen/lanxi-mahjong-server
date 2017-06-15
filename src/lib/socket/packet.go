@@ -1,11 +1,3 @@
-/**********************************************************
- * Author        : Michael
- * Email         : dolotech@163.com
- * Last modified : 2016-01-23 10:24
- * Filename      : packet.go
- * Description   : 通讯协议处理，主要处理封包和解包的过程
- * *******************************************************/
-
 package socket
 
 var HeaderLen uint32 = 1 //　包头长度

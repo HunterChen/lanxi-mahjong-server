@@ -118,7 +118,6 @@ func (t *Desk) Operate(card uint32, value int64, seat uint32) int32 {
 
 func (t *Desk) turn() {
 	count := t.optCount()
-	glog.Infoln("turn",count)
 	if count == 0 { //无操作
 		 t.drawcard() //摸牌
 		return
@@ -127,7 +126,6 @@ func (t *Desk) turn() {
 
 	if count > 1 {
 		// 按逆时针优先胡牌
-		glog.Infoln(" 按逆时针优先胡牌")
 		s := t.seat
 		for i := uint32(1); i <= 4; i++ {
 			s = (s + i) % 4
@@ -142,7 +140,6 @@ func (t *Desk) turn() {
 				return
 			}
 		}
-		glog.Infoln(" 提示碰和杠")
 		// 提示碰和杠
 		for i := uint32(1); i <= 4; i++ {
 			if t.opt[i]&algorithm.KONG > 0 || t.opt[i]&algorithm.PENG > 0 {
@@ -151,7 +148,6 @@ func (t *Desk) turn() {
 			}
 		}
 		// 提示吃
-		glog.Infoln(" 提示吃")
 		for i := uint32(1); i <= 4; i++ {
 			if t.opt[i]&algorithm.CHOW > 0 {
 				t.sendOperate(t.opt[i], i)
