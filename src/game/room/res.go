@@ -4,7 +4,6 @@ import (
 	"game/algorithm"
 	"game/interfacer"
 	"protocol"
-
 	"code.google.com/p/goprotobuf/proto"
 	"lib/utils"
 )

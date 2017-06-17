@@ -16,13 +16,14 @@ const (
 	OFFLINE = "offline"
 )
 
-func newConnection(socket *websocket.Conn) *Connection {
+func newConnection(socket *websocket.Conn,ip uint32) *Connection {
 	c := &Connection{
 		writeChan: make(chan interfacer.IProto, 128),
 		ws:        socket,
 		ReadChan:  make(chan *Packet, 128),
 		connected: true,
 		closeChan: make(chan bool, 1),
+		ipAddr:ip,
 	}
 	return c
 }

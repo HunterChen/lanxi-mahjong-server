@@ -6,6 +6,8 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/gorilla/websocket"
+	"strings"
+	"lib/utils"
 )
 
 type Packet struct {
@@ -57,7 +59,14 @@ func wSHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c := newConnection(socket)
+	ip:=socket.RemoteAddr().String()
+	iparr:=strings.Split(ip,":")
+	var iip uint32
+	if len(iparr) > 0{
+		ip = iparr[0]
+		iip =utils.InetToaton(ip)
+	}
+	c := newConnection(socket,iip)
 	go c.Reader(c.ReadChan)
 	go c.LoginTimeout()
 	go c.WritePump()

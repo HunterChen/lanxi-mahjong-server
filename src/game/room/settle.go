@@ -52,19 +52,19 @@ func fanType(lianCount, paoseat, huseat, score uint32, maizi map[uint32]uint32, 
 	if paoseat == huseat { //自摸,收三家
 		for i := uint32(1); i <= 4; i++ {
 			if i != huseat {
-				 //huFan = over(huFan, huseat, i, int32(score)*2*int32(lianCount+1)+int32(maizi[huseat]+maizi[i])*int32(score))
-				huFan = over(huFan, huseat, i, int32(score))
+				 huFan = over(huFan, huseat, i, int32(maizi[huseat]+maizi[i])*int32(score))
+				//huFan = over(huFan, huseat, i, int32(score))
 			}
 		}
 	} else { //炮胡,也收三家
 		for i := uint32(1); i <= 4; i++ {
 			if i != huseat {
 				if i == paoseat {
-					 //huFan = over(huFan, huseat, i, int32(score)*int32(lianCount+1)+int32(maizi[huseat]+maizi[i])*int32(score))
-					huFan = over(huFan, huseat, i, int32(score))
+					 huFan = over(huFan, huseat, i, int32(maizi[huseat]+maizi[i])*int32(score))
+					//huFan = over(huFan, huseat, i, int32(score))
 				} else {
-					 //huFan = over(huFan, huseat, i, int32(float32(score)*0.5)*int32(lianCount+1)+int32(maizi[huseat]+maizi[i])*int32(float32(score)*0.5))
-					huFan = over(huFan, huseat, i, int32(float32(score)*0.5))
+					 huFan = over(huFan, huseat, i, int32(maizi[huseat]+maizi[i])*int32(float32(score)*0.5))
+					//huFan = over(huFan, huseat, i, int32(float32(score)*0.5))
 				}
 			}
 		}
