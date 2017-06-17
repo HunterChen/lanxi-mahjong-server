@@ -54,6 +54,8 @@ func wSHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		return
 	}
+
+
 	socket, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		return

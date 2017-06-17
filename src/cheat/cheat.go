@@ -15,9 +15,6 @@ import (
 	"github.com/labstack/echo/middleware"
 	"lib/utils"
 	"game/resource"
-	"cheat/statics"
-	"runtime"
-	"time"
 )
 
 //用于测试指定房间牌型
@@ -28,13 +25,6 @@ type RoomCheat struct {
 	Seat     [][]byte `json:"seat"`     // 每个座位的手牌 第一个是座家的，其它三家随机
 	Card     []byte   `json:"card"`     // 剩余的牌
 }
-
-
-var (
-	VERSION = "0.0.1"
-	BUILD_TIME      = ""
-	RUN_TIME      = time.Now().Format("2006-01-02 15:04:05")
-)
 
 func Run(port string) {
 	e := echo.New()
@@ -57,22 +47,9 @@ func Run(port string) {
 
 	// 后台系统发房卡接口
 	e.POST("/roomcard", updateRoomCard)
-	e.POST("/printroominfo", printroominfo)
 
 	e.GET("/reloadconfig", reloadconfig)
 
-	e.GET("/release", release)
-	// debug
-	//e.GET("/debug/pprof/", pprof.Index)
-	//e.GET("/debug/pprof/cmdline", pprof.Cmdline)
-	//e.GET("/debug/pprof/symbol", pprof.Symbol)
-	//e.POST("/debug/pprof/symbol", pprof.Symbol)
-	//e.GET("/debug/pprof/profile", pprof.Profile)
-	//router.Handler("GET", "/debug/pprof/heap", pprof.Handler("heap"))
-	//router.Handler("GET", "/debug/pprof/goroutine", pprof.Handler("goroutine"))
-	//router.Handler("GET", "/debug/pprof/block", pprof.Handler("block"))
-	//router.Handle("PUT", "/debug/setblockrate", http_api.Decorate(setBlockRateHandler, log, http_api.PlainText))
-	//router.Handler("GET", "/debug/pprof/threadcreate", pprof.Handler("threadcreate"))
 	e.Start(port)
 }
 
@@ -84,30 +61,6 @@ type RoomInfoReq struct {
 	RoomId int      `json:"roomid"` // 房间号(邀请码)
 }
 
-func release(c echo.Context) error {
-	return c.JSON(http.StatusOK, H{"go version": runtime.Version(),"build time":BUILD_TIME,"version":VERSION,"startup time":RUN_TIME})
-}
-func staticsHdl(c echo.Context) error {
-	//bs,err := json.Marshal(statics.GetSysmtemInfo())
-	return c.JSON(http.StatusOK, statics.GetSysmtemInfo())
-}
-func printroominfo(c echo.Context) error {
-	c.Response().CloseNotify()
-	body, _ := ioutil.ReadAll(c.Request().Body)
-	roomInfoReq := &RoomInfoReq{}
-	err := json.Unmarshal(body, roomInfoReq)
-	if err != nil {
-		return c.JSON(http.StatusOK, H{"code": 1007})
-	}
-
-	r := room.Get(strconv.Itoa(roomInfoReq.RoomId))
-
-	if r == nil {
-		return c.JSON(http.StatusOK, H{"msg": "房间不存在"})
-	}
-
-	return c.JSON(http.StatusOK, H{"data": r.ToString()})
-}
 func updateRoomCard(c echo.Context) error {
 	c.Response().CloseNotify()
 	body, _ := ioutil.ReadAll(c.Request().Body)

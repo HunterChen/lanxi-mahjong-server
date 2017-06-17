@@ -17,7 +17,7 @@
 	Web_port=":8086"
 	Pay_port=":7005"
 	Pay_wx_pattern="/mahjong/wxpay/notice"
-	Share_addr="http://lanxi.yiiyu.cn/wechat/download"
+	Share_addr="http://yiiyu.cn/lanxi/wechat/download"
 
 	Server_id=9                   # 本逻辑服的唯一编号
 	Version="1.0.1"

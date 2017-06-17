@@ -5,11 +5,17 @@ import (
 	"net"
 	"net/http"
 	"runtime/debug"
-	//"strconv"
 	"time"
-
+	"net/http/pprof"
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
+	"runtime"
+)
+
+var (
+	VERSION    = "0.0.1"
+	BUILD_TIME = ""
+	RUN_TIME   = time.Now().Format("2006-01-02 15:04:05")
 )
 
 type broadcastPacket struct {
@@ -22,9 +28,53 @@ type detectOnline struct {
 	detectChan chan []interfacer.IConn
 }
 
+func printroominfo(w http.ResponseWriter, r *http.Request) {
+
+	//body, _ := ioutil.ReadAll(c.Request().Body)
+	//roomInfoReq := &cheat.RoomInfoReq{}
+	//err := json.Unmarshal(body, roomInfoReq)
+	//if err != nil {
+	//	return c.JSON(http.StatusOK, H{"code": 1007})
+	//}
+
+	//r := room.Get(strconv.Itoa(roomInfoReq.RoomId))
+	//
+	//if r == nil {
+	//	w.Write([]byte("房间不存在"))
+	//}
+	//
+	//w.Write([]byte(r.ToString()))
+}
+
+func release(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("go version：" + runtime.Version() +
+		"\n build time: " + BUILD_TIME +
+		"\n version: " + VERSION +
+		"\n startup time: " + RUN_TIME ))
+}
 func routes() (r *mux.Router) {
 	r = mux.NewRouter()
 	r.HandleFunc("/", wSHandler).Methods("GET")
+	r.HandleFunc("/release", release)
+	r.HandleFunc("/printroominfo/", printroominfo)
+
+	// debug
+	r.HandleFunc("/debug/pprof/", pprof.Index)
+	r.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
+	r.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
+	r.HandleFunc("/debug/pprof/symbol", pprof.Symbol).Methods("POST")
+	r.HandleFunc("/debug/pprof/profile", pprof.Profile)
+	r.Handle("/debug/pprof/heap", pprof.Handler("heap"))
+	r.Handle("/debug/pprof/goroutine", pprof.Handler("goroutine"))
+	r.Handle("/debug/pprof/block", pprof.Handler("block"))
+	r.Handle("/debug/pprof/threadcreate", pprof.Handler("threadcreate"))
+
+	//r.HandleFunc("/debug/pprof/", http.HandlerFunc(pprof.Index))
+	//r.HandleFunc("/debug/pprof/cmdline", http.HandlerFunc(pprof.Cmdline))
+	//r.HandleFunc("/debug/pprof/profile", http.HandlerFunc(pprof.Profile))
+	//r.HandleFunc("/debug/pprof/symbol", http.HandlerFunc(pprof.Symbol))
+	//r.HandleFunc("/debug/pprof/trace", http.HandlerFunc(pprof.Trace))
+
 	return
 }
 
@@ -138,7 +188,7 @@ func (h *hub) run() {
 				}
 				m.successChan <- result
 			}
-		case  <-h.closeChan:
+		case <-h.closeChan:
 			for _, c := range h.connections {
 				c.Close()
 			}
