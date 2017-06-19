@@ -72,9 +72,8 @@ func ExistHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 
 		value = value | tv
 		return value
 	}
-	if existHu3n2(cards, wildcard) {
-		value = HU
-	}
+	value=existHu3n2(cards, wildcard)
+
 	//是否3n+2牌型
 	if value > 0 {
 		// 一财一刻、两财一刻、三财一刻检测
@@ -113,11 +112,11 @@ func ExistHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 
 		return value
 	}
 
-	// 十三烂牌型胡牌检测
-	value = existThirteen(cards,wildcard)
-	if value > 0 {
-		return HU | value
-	}
+	//// 十三烂牌型胡牌检测
+	//value = existThirteen(cards,wildcard)
+	//if value > 0 {
+	//	return HU | value
+	//}
 
 	return 0
 }

@@ -32,21 +32,17 @@ func guiwei(cs []byte, ch, ps, ks []uint32, wildcard byte) (value int64) {
 	for i := 0; i < caishenCount; i++ {
 		for k, v := range cs {
 			if v == wildcard {
-				//glog.Errorf("==============%+x %d %d %x",cs,caishenCount,k,v)
 				// 这里不加入13不靠检测，13不靠内部带有财神归位检测，13不靠没有n财n刻
-				if existHu3n2(cs, wildcard) ||
+				if existHu3n2(cs, wildcard) >0||
 					existLuanFeng(getHandPongKong(cs, ch, ps, ks, wildcard)) > 0 ||
 					exist7pair(cs) > 0 {
 					if count == 1 {
-						//glog.Errorf("==============%+x %d %d %x",cs,caishenCount,k,v)
 						value = HU_GUI_WEI1
 						return
 					} else if count == 2 {
-						//glog.Errorf("==============%+x %d %d %x",cs,caishenCount,k,v)
 						value = HU_GUI_WEI2
 						return
 					} else if count == 3 {
-						//glog.Errorf("==============%+x %d %d %x",cs,caishenCount,k,v)
 						value = HU_GUI_WEI3
 						return
 					}
@@ -79,7 +75,6 @@ func ExistCaiShen(cards []byte, hu int64, wildcard byte, card byte, draw bool) i
 
 	count := 0
 
-	//glog.Infoln(hu&HU_BAO_TOU1 > 0 ,  hu&HU_BAO_TOU2 > 0, hu&HU_BAO_TOU3 > 0)
 	if hu&HU_BAO_TOU1 > 0 || hu&HU_BAO_TOU2 > 0 || hu&HU_BAO_TOU3 > 0 {
 		wildcardFlag := false
 		cardFlag := false
@@ -105,7 +100,6 @@ func ExistCaiShen(cards []byte, hu int64, wildcard byte, card byte, draw bool) i
 		}
 	}
 
-	//glog.Infof("%+x  %d",cards,count)
 	if count == 0 {
 		return hu
 	}
@@ -174,7 +168,7 @@ func ExistNCaiNKe(cs []byte, ch, ps, ks []uint32, wildcard byte) int64 {
 				}
 			}
 			Sort(list, 0, len(list)-1)
-			if existHu3n2(list, wildcard) ||
+			if existHu3n2(list, wildcard)>0 ||
 				existLuanFeng(getHandPongKong(list, ch, ps, ks, wildcard)) > 0 {
 				return HU_CAI_3
 			}
@@ -207,7 +201,7 @@ func ExistNCaiNKe(cs []byte, ch, ps, ks []uint32, wildcard byte) int64 {
 			}
 
 			Sort(list, 0, len(list)-1)
-			if existHu3n2(list, wildcard) ||
+			if existHu3n2(list, wildcard) >0||
 				existLuanFeng(getHandPongKong(list, ch, ps, ks, wildcard)) > 0 {
 				value := guiwei(list, ch, ps, ks, wildcard)
 				return HU_CAI_2 | value
@@ -234,13 +228,12 @@ func ExistNCaiNKe(cs []byte, ch, ps, ks []uint32, wildcard byte) int64 {
 			}
 
 			Sort(list, 0, len(list)-1)
-			if existHu3n2(list, wildcard) ||
+			if existHu3n2(list, wildcard)>0 ||
 				existLuanFeng(getHandPongKong(list, ch, ps, ks, wildcard)) > 0 {
 				value := guiwei(list, ch, ps, ks, wildcard)
 				return HU_CAI_1 | value
 			}
 		}
 	}
-	//glog.Errorf("==============%+x",cs)
 	return guiwei(cs, ch, ps, ks, wildcard)
 }

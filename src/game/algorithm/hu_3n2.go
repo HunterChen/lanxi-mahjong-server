@@ -145,9 +145,9 @@ func hu3n2(cs []byte) bool {
 }
 
 // 3n +2 牌型胡牌 有序slices cs
-func existHu3n2(cs []byte, wildcard byte) bool {
+func existHu3n2(cs []byte, wildcard byte) int64 {
 	if hu3n2(cs) {
-		return true
+		return HU
 	}
 
 	// 财神是白板的情况作限制
@@ -159,11 +159,13 @@ func existHu3n2(cs []byte, wildcard byte) bool {
 				cards[k] = wildcard
 				Sort(cards, 0, len(cards)-1)
 				if hu3n2(cards) {
-					return true
+					return HU
 				}
+				thirteen := existThirteen(cards, wildcard)
+				return HU | thirteen
 			}
 		}
 	}
 
-	return false
+	return 0
 }

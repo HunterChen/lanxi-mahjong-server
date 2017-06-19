@@ -2,14 +2,8 @@ package main
 
 import (
 	"game/data"
-	"game/room"
 	"flag"
-	"net"
-	"os"
-	"os/signal"
 	//_ "net/http/pprof"
-	"runtime/debug"
-	"syscall"
 	"github.com/golang/glog"
 	"config"
 	"cheat"
@@ -18,6 +12,13 @@ import (
 	_"game/request"
 	"lib/socket"
 	"fmt"
+	"net/http"
+	"net"
+	"runtime/debug"
+	"os"
+	"os/signal"
+	"syscall"
+	"game/room"
 )
 
 var (
@@ -44,23 +45,23 @@ func main() {
 	ln, lnCh := socket.Server(config.Opts().Server_port)
 
 	glog.Infoln("Server listening on", config.Opts().Server_port)
-	glog.Infoln("Server started at", ln.Addr())
+	//glog.Infoln("Server started at", ln.Addr())
 	go cheat.Run(config.Opts().AdminPort)
 
-	gamesignalProc(ln, lnCh)
 	//go pprof()
 	gamesignalProc(ln, lnCh)
 }
 
-//func pprof() {
-//	if config.Opts().Oprof_port != "" {
-//		err := http.ListenAndServe(config.Opts().Oprof_port, nil)
-//		glog.Infoln("性能监控端口:", config.Opts().Oprof_port)
-//		if err != nil {
-//			glog.Fatal("ListenAndServe error: ", err)
-//		}
-//	}
-//}
+func pprof() {
+	if config.Opts().Oprof_port != "" {
+		err := http.ListenAndServe(config.Opts().Oprof_port, nil)
+		glog.Infoln("性能监控端口:", config.Opts().Oprof_port)
+		if err != nil {
+			glog.Fatal("ListenAndServe error: ", err)
+		}
+	}
+}
+
 
 func gamesignalProc(ln net.Listener, lnCh chan error) {
 	defer func() {
@@ -94,3 +95,4 @@ func gamesignalProc(ln net.Listener, lnCh chan error) {
 		}
 	}
 }
+
