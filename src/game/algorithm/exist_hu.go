@@ -1,7 +1,5 @@
 package algorithm
 
-import "github.com/golang/glog"
-
 func DetectKong(cs []byte, ps []uint32, wildcard byte) (status int64) {
 	if len(existAnKong(cs, wildcard)) > 0 {
 		status |= AN_KONG
@@ -13,7 +11,6 @@ func DetectKong(cs []byte, ps []uint32, wildcard byte) (status int64) {
 	}
 	return
 }
-
 
 // 判断是否胡牌,0表示不胡牌,非0用32位表示不同的胡牌牌型
 func ExistHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 {
@@ -53,7 +50,7 @@ func ExistHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 
 			}
 		}
 		// 清一色检测
-		qing := existOneSuit(handPongKong,wildcard)
+		qing := existOneSuit(handPongKong, wildcard)
 		value = value | qing
 		return value
 	}
@@ -63,7 +60,7 @@ func ExistHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 
 		value |= HU
 		handPongKong := getHandPongKong(cards, ch, ps, ks, wildcard)
 		// 清一色检测
-		color := existOneSuit(handPongKong,wildcard)
+		color := existOneSuit(handPongKong, wildcard)
 		if color > 0 {
 			value = color | value
 		}
@@ -72,7 +69,7 @@ func ExistHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 
 		value = value | tv
 		return value
 	}
-	value=existHu3n2(cards, wildcard)
+	value = existHu3n2(cards, wildcard)
 
 	//是否3n+2牌型
 	if value > 0 {
@@ -86,8 +83,7 @@ func ExistHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 
 			return value
 		}
 		// 清一色检测
-		glog.Infof("%+x",handPongKong)
-		color := existOneSuit(handPongKong,wildcard)
+		color := existOneSuit(handPongKong, wildcard)
 		if color > 0 {
 			value = color | value
 		}
@@ -108,16 +104,8 @@ func ExistHu(cards []byte, ch, ps, ks []uint32, wildcard byte, card byte) int64 
 		if len(cards) == 2 {
 			value |= quanQiuRen(cards, ch, ps, ks)
 		}
-
 		return value
 	}
-
-	//// 十三烂牌型胡牌检测
-	//value = existThirteen(cards,wildcard)
-	//if value > 0 {
-	//	return HU | value
-	//}
-
 	return 0
 }
 

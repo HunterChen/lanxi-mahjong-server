@@ -169,6 +169,7 @@ func ExistNCaiNKe(cs []byte, ch, ps, ks []uint32, wildcard byte) int64 {
 			}
 			Sort(list, 0, len(list)-1)
 			if existHu3n2(list, wildcard)>0 ||
+				exist7pair(list) >0||
 				existLuanFeng(getHandPongKong(list, ch, ps, ks, wildcard)) > 0 {
 				return HU_CAI_3
 			}
@@ -202,6 +203,7 @@ func ExistNCaiNKe(cs []byte, ch, ps, ks []uint32, wildcard byte) int64 {
 
 			Sort(list, 0, len(list)-1)
 			if existHu3n2(list, wildcard) >0||
+				exist7pair(list) >0||
 				existLuanFeng(getHandPongKong(list, ch, ps, ks, wildcard)) > 0 {
 				value := guiwei(list, ch, ps, ks, wildcard)
 				return HU_CAI_2 | value
@@ -229,6 +231,7 @@ func ExistNCaiNKe(cs []byte, ch, ps, ks []uint32, wildcard byte) int64 {
 
 			Sort(list, 0, len(list)-1)
 			if existHu3n2(list, wildcard)>0 ||
+				exist7pair(list) >0||
 				existLuanFeng(getHandPongKong(list, ch, ps, ks, wildcard)) > 0 {
 				value := guiwei(list, ch, ps, ks, wildcard)
 				return HU_CAI_1 | value
