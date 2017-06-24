@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"runtime/debug"
 	"time"
-	"net/http/pprof"
 	"github.com/golang/glog"
 	"github.com/gorilla/mux"
 	"runtime"
+	"github.com/labstack/echo"
 )
 
 var (
@@ -52,67 +52,46 @@ func release(w http.ResponseWriter, r *http.Request) {
 		"\n version: " + VERSION +
 		"\n startup time: " + RUN_TIME ))
 }
+
+func pprof(w http.ResponseWriter, r *http.Request)  {
+	r.Header.Set(echo.HeaderContentType, echo.MIMETextHTMLCharsetUTF8)
+	http.DefaultServeMux.ServeHTTP(w, r)
+}
 func routes() (r *mux.Router) {
 	r = mux.NewRouter()
 	r.HandleFunc("/", wSHandler).Methods("GET")
-	r.HandleFunc("/release", release)
-	r.HandleFunc("/printroominfo/", printroominfo)
+	//r.HandleFunc("/release", release).Methods("GET")
+	//r.HandleFunc("/printroominfo/", printroominfo).Methods("GET")
 
-	// debug
-	r.HandleFunc("/debug/pprof/", pprof.Index)
-	r.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
-	r.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
-	r.HandleFunc("/debug/pprof/symbol", pprof.Symbol).Methods("POST")
-	r.HandleFunc("/debug/pprof/profile", pprof.Profile)
-	r.Handle("/debug/pprof/heap", pprof.Handler("heap"))
-	r.Handle("/debug/pprof/goroutine", pprof.Handler("goroutine"))
-	r.Handle("/debug/pprof/block", pprof.Handler("block"))
-	r.Handle("/debug/pprof/threadcreate", pprof.Handler("threadcreate"))
-
+	//r.Path("{[a-zA-Z_][a-zA-Z0-9_]*}").Handler(http.HandlerFunc(pprof))
+	//r.HandleFunc("/debug/{*}", http.HandlerFunc(pprof))
 	//r.HandleFunc("/debug/pprof/", http.HandlerFunc(pprof.Index))
 	//r.HandleFunc("/debug/pprof/cmdline", http.HandlerFunc(pprof.Cmdline))
 	//r.HandleFunc("/debug/pprof/profile", http.HandlerFunc(pprof.Profile))
 	//r.HandleFunc("/debug/pprof/symbol", http.HandlerFunc(pprof.Symbol))
 	//r.HandleFunc("/debug/pprof/trace", http.HandlerFunc(pprof.Trace))
 
+
+
 	return
 }
 
-func Server(addr string) (ln net.Listener, ch chan error) {
+func Server(addr string) (ln net.Listener) {
 	go h.run()
-	ch = make(chan error)
+
 	ln, err := net.Listen("tcp", addr)
 	if err != nil {
 		panic(err)
 	}
 	go func() {
 		r := routes()
-		ch <- http.Serve(tcpKeepAliveListener{ln.(*net.TCPListener)}, r)
+		http.Serve(ln.(*net.TCPListener), r)
 	}()
 	return
 }
 
-// tcpKeepAliveListener sets TCP keep-alive timeouts on accepted
-// connections. It's used by ListenAndServe and ListenAndServeTLS so
-// dead TCP connections (e.g. closing laptop mid-download) eventually
-// go away.
-type tcpKeepAliveListener struct {
-	*net.TCPListener
-}
-
-func (ln tcpKeepAliveListener) Accept() (c net.Conn, err error) {
-	tc, err := ln.AcceptTCP()
-	if err != nil {
-		return
-	}
-	tc.SetKeepAlive(true)
-	tc.SetKeepAlivePeriod(3 * time.Minute)
-	return tc, nil
-}
-
 func logout(c interfacer.IConn) {
 	h.unregister <- c
-	// sync online table
 }
 
 // 在线人数

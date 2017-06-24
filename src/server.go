@@ -42,14 +42,14 @@ func main() {
 	data.InitIDGen()
 	csv.InitShop()
 
-	ln, lnCh := socket.Server(config.Opts().Server_port)
+	ln := socket.Server(config.Opts().Server_port)
 
 	glog.Infoln("Server listening on", config.Opts().Server_port)
 	//glog.Infoln("Server started at", ln.Addr())
 	go cheat.Run(config.Opts().AdminPort)
 
 	//go pprof()
-	gamesignalProc(ln, lnCh)
+	gamesignalProc(ln)
 }
 
 func pprof() {
@@ -63,7 +63,7 @@ func pprof() {
 }
 
 
-func gamesignalProc(ln net.Listener, lnCh chan error) {
+func gamesignalProc(ln net.Listener) {
 	defer func() {
 		if err := recover(); err != nil {
 			glog.Errorln(string(debug.Stack()))
@@ -80,7 +80,6 @@ func gamesignalProc(ln net.Listener, lnCh chan error) {
 		default:
 			//先关闭监听服务
 			ln.Close()
-			glog.Infoln(<-lnCh)
 			//关闭连接
 			socket.Close()
 			//关闭服务
