@@ -174,8 +174,6 @@ func (t *Desk) sendOperate(value int64, seat uint32) {
 		p.Send(msg1)
 		msg2 := res_discard(t.seat, card)
 		t.broadcast_(seat, msg2) //消息广播
-
-		glog.Infof("%d %d %b ",seat,t.seat,value)
 	} else { //二次提示操作
 		t.operate += 1 //操作状态变化
 		msg3 := res_pengkong(t.seat, value, card)
