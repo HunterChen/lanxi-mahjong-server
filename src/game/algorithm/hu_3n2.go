@@ -162,7 +162,9 @@ func existHu3n2(cs []byte, wildcard byte) int64 {
 					return HU
 				}
 				thirteen := existThirteen(cards, wildcard)
-				return HU | thirteen
+				if thirteen > 0{
+					return HU | thirteen
+				}
 			}
 		}
 	}
