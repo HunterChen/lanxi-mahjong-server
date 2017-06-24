@@ -3,7 +3,6 @@ package room
 import (
 	"game/algorithm"
 	"protocol"
-	"github.com/golang/glog"
 )
 
 // 玩家进行吃/碰/杠/胡操作
@@ -13,7 +12,6 @@ func (t *Desk) Operate(card uint32, value int64, seat uint32) int32 {
 	if !t.state {
 		return int32(protocol.Error_NoStarted)
 	}
-
 
 	if t.opt[seat] == 0 {
 		return int32(protocol.Error_NoOperate)
@@ -33,25 +31,25 @@ func (t *Desk) Operate(card uint32, value int64, seat uint32) int32 {
 			}
 
 			var card byte = t.operateCard() //所胡的牌
-			if t.opt[seat]&algorithm.QIANG_GANG > 0{
+			if t.opt[seat]&algorithm.QIANG_GANG > 0 {
 				card = t.qiangKongCard
 			}
 
-			t.he(seat,card)
+			t.he(seat, card)
 		} else {
-			if t.opt[seat]&algorithm.PAOHU >0 {
-				t.skipL(seat, t.opt[seat])       //跳过胡牌
+			if t.opt[seat]&algorithm.PAOHU > 0 {
+				t.skipL(seat, t.opt[seat]) //跳过胡牌
 			}
 
-			count:=0
-			for _,v:=range t.opt{
-				if v >0{
+			count := 0
+			for _, v := range t.opt {
+				if v > 0 {
 					count ++
 				}
 			}
-			if count == 1{
+			if count == 1 {
 				t.opt[seat] = 0
-			}else{
+			} else {
 				t.opt[seat] = t.opt[seat] & 0x7E // 掩掉胡的操作
 			}
 
@@ -119,7 +117,7 @@ func (t *Desk) Operate(card uint32, value int64, seat uint32) int32 {
 func (t *Desk) turn() {
 	count := t.optCount()
 	if count == 0 { //无操作
-		 t.drawcard() //摸牌
+		t.drawcard() //摸牌
 		return
 	}
 	// 计算有几个人有操作
@@ -134,7 +132,7 @@ func (t *Desk) turn() {
 			}
 			if t.opt[s]&algorithm.HU > 0 {
 				// 只给胡的操作，掩掉吃、碰和杠
-				value := t.opt[s]>> 7
+				value := t.opt[s] >> 7
 				value <<= 7
 				t.sendOperate(t.opt[s], s)
 				return
