@@ -198,7 +198,7 @@ func (this *Robot) proxyHandle(c uint32, b []byte) {
 			glog.Errorln("protocol  unmarshal fail: ", c)
 		}
 	} else {
-		glog.Errorln("protocol not regist:", c)
+		//glog.Errorln("protocol not regist:", c)
 	}
 }
 

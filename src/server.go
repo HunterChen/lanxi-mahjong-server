@@ -62,7 +62,6 @@ func pprof() {
 	}
 }
 
-
 func gamesignalProc(ln net.Listener) {
 	defer func() {
 		if err := recover(); err != nil {
@@ -74,12 +73,12 @@ func gamesignalProc(ln net.Listener) {
 	//signal.Notify(ch, syscall.SIGHUP)
 	signal.Notify(ch, os.Interrupt, os.Kill, syscall.SIGHUP) //监听SIGINT和SIGKILL信号
 	glog.Infoln("signalProc ... ")
-	for {
+	//for {
 		msg := <-ch
-		switch msg {
-		default:
-			//先关闭监听服务
-			ln.Close()
+		//switch msg {
+		//default:
+		//先关闭监听服务
+		//	ch.Close()
 			//关闭连接
 			socket.Close()
 			//关闭服务
@@ -89,9 +88,8 @@ func gamesignalProc(ln net.Listener) {
 			glog.Infof("get sig -> %v\n", msg)
 
 			return
-		case syscall.SIGHUP:
-
-		}
+			//case syscall.SIGHUP:
+			//
+			//}
+		//}
 	}
-}
-

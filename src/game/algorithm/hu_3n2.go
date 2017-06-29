@@ -149,6 +149,10 @@ func existHu3n2(cs []byte, wildcard byte) int64 {
 	if hu3n2(cs) {
 		return HU
 	}
+	thirteen := existThirteen(cs, wildcard)
+	if thirteen > 0{
+		return HU | thirteen
+	}
 
 	// 财神是白板的情况作限制
 	if wildcard != BAI {
